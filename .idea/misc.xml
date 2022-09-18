@@ -4,11 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/drawable/background_login.xml" value="0.107" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/drawable/custom_button.xml" value="0.107" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/drawable/custom_edit_text.xml" value="0.207" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/drawable/custom_text_view.xml" value="0.107" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_add_product.xml" value="0.18" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_home_admin.xml" value="0.22" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_list_product.xml" value="0.1796875" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_list_user.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_main.xml" value="0.1859375" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/custom_layout_process.xml" value="0.1" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/item_product.xml" value="0.16" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/item_user.xml" value="0.18" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/DoAnTotNghiep/app/src/main/res/layout/layout_edit_item.xml" value="0.25" />
       </map>
     </option>
   </component>

@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.doantotnghiep">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,11 +17,23 @@
         android:theme="@style/Theme.DoAnTotNghiep"
         tools:targetApi="31">
         <activity
-            android:name=".Customer.CustomerActivity"
+            android:parentActivityName=".Admin.HomeAdminActivity"
+            android:name=".Admin.ListUserActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin.HomeAdminActivity"
+            android:parentActivityName=".Admin.HomeAdminActivity"
+            android:name=".Admin.ListProductActivity"
             android:exported="false" />
+        <activity
+            android:parentActivityName=".Admin.HomeAdminActivity"
+            android:name=".Admin.AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Customer.CustomerActivity"
+            android:exported="false" />
+         <activity
+         android:name=".Admin.HomeAdminActivity"
+         android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />

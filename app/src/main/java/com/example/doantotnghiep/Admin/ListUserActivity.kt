@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doantotnghiep.Adapter.UserAdapter
 import com.example.doantotnghiep.Helper.Constanst
+import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.UserViewModel
 import com.example.doantotnghiep.databinding.ActivityListProductBinding
 import com.example.doantotnghiep.databinding.ActivityListUserBinding
 
-class ListUserActivity : AppCompatActivity() {
+class ListUserActivity : AppCompatActivity(), IClickItem {
     lateinit var viewBinding : ActivityListUserBinding
     lateinit var _adapter: UserAdapter
 
@@ -30,7 +31,7 @@ class ListUserActivity : AppCompatActivity() {
         supportActionBar?.setTitle("List User")
         supportActionBar?.setDisplayShowHomeEnabled(true)
         viewModel = ViewModelProvider(this)[UserViewModel::class.java]
-        _adapter = UserAdapter()
+        _adapter = UserAdapter(this)
         viewBinding.recyclerUser?.apply {
             adapter = _adapter
             hasFixedSize()
@@ -47,6 +48,10 @@ class ListUserActivity : AppCompatActivity() {
 
         })
 
+
+    }
+
+    override fun getPosition(index: Int) {
 
     }
 }

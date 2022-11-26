@@ -18,8 +18,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="72dp">
-
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/spinner_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="Category"
+                android:padding="10dp"
+                android:textSize="16sp"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_padding="8dp"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_height="46dp"
+                app:spinner_popup_animation="dropdown"
+                app:spinner_popup_elevation="14dp" />
             <TextView
+                app:layout_constraintTop_toBottomOf="@+id/spinner_data"
                 android:id="@+id/add_pro_name_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -31,9 +48,9 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent">
 
+            </TextView>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameOutlinedTextField"
                 android:layout_width="match_parent"

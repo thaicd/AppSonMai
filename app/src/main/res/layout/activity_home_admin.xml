@@ -26,6 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/btn_add_category"
+            android:text="Add Category"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            tools:ignore="MissingConstraints">
+
+        </Button>
+        <Button
+            android:layout_marginTop="10dp"
             android:id="@+id/btn_add_product"
             android:text="Add Product"
             android:padding="10dp"

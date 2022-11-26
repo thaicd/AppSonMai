@@ -12,6 +12,7 @@ import com.example.doantotnghiep.Admin.HomeAdminActivity
 import com.example.doantotnghiep.Customer.CustomerActivity
 import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.Model.User
+import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.ViewModel.LoginViewModel
 import com.example.doantotnghiep.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseUser
@@ -21,27 +22,37 @@ class MainActivity : AppCompatActivity() {
     lateinit var loginViewModel      : LoginViewModel
     lateinit var dialog              : CustomProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
+        dialog = CustomProgressBar(this@MainActivity)
+        dialog.showProgressBar(this)
         super.onCreate(savedInstanceState)
+
+
         viewBindingActivity = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBindingActivity.root)
-        dialog = CustomProgressBar(this@MainActivity)
+
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        loginViewModel.checkLoginSession()
+        loginViewModel.checkLoginSession(dialog)
 
         loginViewModel.getuserLoginLiveData().observe(this, object : Observer<User> {
             override fun onChanged(t: User?) {
                 if (t != null)
                 {
+                    dialog.dismissDialog()
                     when(t.role_id) {
                         0 -> {
-                            dialog.dismissDialog()
+
                             val intent = Intent(this@MainActivity, HomeAdminActivity::class.java)
                             startActivity(intent)
                         }
                         2 -> {
-                            dialog.dismissDialog()
+//                            dialog.dismissDialog()
+                            ShareReference.putUser(t)
                             val intent = Intent(this@MainActivity, CustomerActivity::class.java)
                             startActivity(intent)
+                        }
+                        else -> {
+//                            dialog.dismissDialog()
+
                         }
                     }
                 }
@@ -51,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         loginViewModel.getloginLiveData().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(t: FirebaseUser?) {
                 if (t != null ) {
-                    loginViewModel.checkLoginSession()
+                    loginViewModel.checkLoginSession(dialog)
                 }else {
                     Toast.makeText(this@MainActivity, " Tài khoản hoặc mật khẩu của bạn không đúng", Toast.LENGTH_SHORT).show()
                 }
@@ -87,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        loginViewModel.checkLoginSession()
+        loginViewModel.checkLoginSession(dialog)
     }
 
 }

@@ -8,12 +8,12 @@
 
     <com.app.aimatedprogresslib.AnimatedLoadingIndicator
         android:id="@+id/custom_progress"
+        style="@style/AnimatedLoadingIndicatorView.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/AnimatedLoadingIndicatorView.Large"
         android:layout_centerInParent="true"
-        app:indicatorName="com.app.aimatedprogresslib.Indicators.ProgressBallMultipleIndicator"
-        app:indicatorColor="@android:color/white" />
+        app:indicatorColor="@android:color/white"
+        app:indicatorName="com.app.aimatedprogresslib.Indicators.ProgressBallMultipleIndicator" />
 
     <TextView
         android:id="@+id/progress_tv"

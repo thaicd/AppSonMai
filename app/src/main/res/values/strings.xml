@@ -2,6 +2,12 @@
     <string name="app_name">DoAnTotNghiep</string>
     <string name="loading">Loading&#8230;</string>
 
+    <string name="home">Home </string>
+    <string name="favorite">Favorite </string>
+    <string name="cart">Cart </string>
+    <string name="logout">LogOut </string>
+    <string name="order">Order </string>
+
 
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
@@ -169,5 +175,7 @@
     <string name="redirect_home_timer_text">Redirecting to home in %s</string>
     <string name="status_dialog_title">Select Status of Product</string>
     <string name="price_card_status_label_string">Order Status</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

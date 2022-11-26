@@ -19,7 +19,10 @@ class CustomProgressBar {
     }
 
     fun showProgressBar(activity: Activity) {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if(dialog == null ) {
+            dialog = Dialog(activity)
+        }
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(com.example.doantotnghiep.R.layout.custom_layout_process)
 
         val window = dialog.window

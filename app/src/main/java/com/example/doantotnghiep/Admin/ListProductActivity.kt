@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.ProductAdapter
+import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.ProductViewModel
 import com.example.doantotnghiep.ViewModel.UserViewModel
 import com.example.doantotnghiep.databinding.ActivityListProductBinding
 
-class ListProductActivity : AppCompatActivity() {
+class ListProductActivity : AppCompatActivity() , IClickItem{
 
     lateinit var viewBinding : ActivityListProductBinding
     lateinit var viewModel: ProductViewModel
@@ -23,7 +24,12 @@ class ListProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityListProductBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
-        adapterPro = ProductAdapter(this@ListProductActivity)
+        supportActionBar?.apply {
+            title = "List Product"
+            setDisplayHomeAsUpEnabled(true)
+        }
+        adapterPro = ProductAdapter(this@ListProductActivity, this)
+
 
         viewBinding.recyclerProduct.apply {
             hasFixedSize()
@@ -41,5 +47,9 @@ class ListProductActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun getPosition(index: Int) {
+
     }
 }

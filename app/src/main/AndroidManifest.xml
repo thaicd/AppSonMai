@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.doantotnghiep">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+
     <application
+        android:name=".Application.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,24 +19,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoAnTotNghiep"
         tools:targetApi="31">
+
         <activity
-            android:parentActivityName=".Admin.HomeAdminActivity"
+            android:name=".Customer.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Customer.OrderCustomerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Customer.DetailProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Customer.ListProductForCustomerActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin.ListUserActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Admin.HomeAdminActivity" />
         <activity
-            android:parentActivityName=".Admin.HomeAdminActivity"
             android:name=".Admin.ListProductActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Admin.HomeAdminActivity" />
         <activity
-            android:parentActivityName=".Admin.HomeAdminActivity"
             android:name=".Admin.AddProductActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Customer.CustomerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Admin.HomeAdminActivity" />
          <activity
-         android:name=".Admin.HomeAdminActivity"
+         android:name=".Customer.CustomerActivity"
          android:exported="false" />
+        <activity
+            android:name=".Admin.HomeAdminActivity"
+            android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />

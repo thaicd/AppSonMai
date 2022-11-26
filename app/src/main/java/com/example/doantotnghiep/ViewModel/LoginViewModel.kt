@@ -2,6 +2,7 @@ package com.example.doantotnghiep.ViewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.Repository.Repository
 import com.google.firebase.auth.FirebaseAuth
@@ -27,11 +28,14 @@ class LoginViewModel : ViewModel() {
         Repository.getRepository().Login(strUser,strPass,loginLiveData)
     }
 
-    fun checkLoginSession() {
+    fun checkLoginSession(dialog : CustomProgressBar? = null) {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
             val uid = user.uid
             Repository.getRepository().checkLoginAccount(uid,userLoginLiveData)
+        }else {
+            dialog?.dismissDialog()
         }
     }
+
 }

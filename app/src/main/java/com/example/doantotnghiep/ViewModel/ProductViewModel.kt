@@ -20,4 +20,16 @@ class ProductViewModel : ViewModel() {
     fun addData(p : Product) = liveData<Boolean> {
         emit(Repository.getRepository().addProduct(p))
     }
+    fun getMyFavoriteProduct(id : String ) = liveData {
+        emit(Repository.getRepository().getListMyFavoriteProduct(id))
+    }
+    fun removeMyFavoriteProduct(idUser: String, idProduct : String ) = liveData {
+        emit(Repository.getRepository().removeFavoriteProduct(idUser, idProduct))
+    }
+    fun addMyFavoriteProduct(idUser: String, idProduct: String, prod : Product) = liveData{
+        emit(Repository.getRepository().addFavoriteProduct(idUser,idProduct,prod))
+    }
+    fun getStatusFavorite(idUser: String, idProduct: String) = liveData {
+        emit(Repository.getRepository().getStatusFavoriteProduct(idUser,idProduct))
+    }
 }

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.databinding.ItemProductBinding
@@ -12,7 +13,7 @@ import com.example.doantotnghiep.databinding.ItemUserBinding
 import com.google.firebase.database.core.Context
 import com.squareup.picasso.Picasso
 
-class ProductAdapter(var mContext: android.content.Context) : RecyclerView.Adapter<ProductAdapter.ProductsVH>() {
+class ProductAdapter(var mContext: android.content.Context, val listener : IClickItem) : RecyclerView.Adapter<ProductAdapter.ProductsVH>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
@@ -47,18 +48,16 @@ class ProductAdapter(var mContext: android.content.Context) : RecyclerView.Adapt
             itemNumber.text ="Number : "+item.number.toString()
             Picasso.with(mContext).load(item.imgUrl).into(itemProduct)
 
+            layoutItem.setOnClickListener {
+                listener.getPosition(holder.bindingAdapterPosition)
+            }
             itemDelete.setOnClickListener{_->
-                onItemClickListener?.let { it(item) }
+                listener.getPosition(holder.adapterPosition)
             }
 
         }
+
     }
 
     inner class ProductsVH(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
-
-    // on item click listener
-    private var onItemClickListener: ((Product) -> Unit)? = null
-    fun setOnItemClickListener(listener: (Product) -> Unit) {
-        onItemClickListener = listener
-    }
 }

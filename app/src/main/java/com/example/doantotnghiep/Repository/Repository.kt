@@ -1,5 +1,6 @@
 package com.example.doantotnghiep.Repository
 
+import android.annotation.SuppressLint
 import kotlinx.coroutines.tasks.await
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -29,6 +30,46 @@ class Repository {
         val ref : DatabaseReference = FirebaseDatabase.getInstance().getReference("Accounts").child(user.id!!)
         ref.setValue(user)
     }
+    suspend fun addProductCart (idUser: String,totalProduct: Int , idProduct: String, cart: Cart) {
+
+        val refer = FirebaseDatabase.getInstance()
+            .getReference("Carts/${idUser}/${idProduct}")
+        val result = refer.get().await()
+        var numberChoice = 1
+
+        if (result.hasChildren()) {
+            Log.d( "addProductCart: ","VAO")
+            var cart = result.getValue(Cart::class.java)
+            cart?.apply {
+
+                this.totalPrice += totalProduct
+                this.numberChoice += numberChoice
+
+                Log.d( "addProductCart: ",this.toString())
+                val ref = FirebaseDatabase.getInstance()
+                    .getReference("Carts/${idUser}/${idProduct}")
+                try {
+                    ref.setValue(this).await()
+                }catch (e : Exception) {
+                }
+            }
+        }else {
+            Log.d( "addProductCart: ","CAO")
+            cart.numberChoice += numberChoice
+            cart.totalPrice   += totalProduct
+            val ref = FirebaseDatabase.getInstance()
+                .getReference("Carts/${idUser}/${idProduct}")
+            try {
+                ref.setValue(cart).await()
+            }catch (e : Exception) {
+            }
+        }
+
+        //Log.d( "addProductCart: ",cart.toString())
+
+
+    }
+
     suspend fun getListCart(idUser : String ) : List<Cart> {
         val ref = FirebaseDatabase.getInstance().
                 getReference("Carts").child(idUser)
@@ -248,15 +289,69 @@ class Repository {
         Log.d(Constanst.log, "res :  ${res.size}" )
         return  res ;
     }
+    suspend fun addOrders(idUser: String, idOrder : String, idProduct: String, order : Order, price : Int) {
+        // debugURL = "Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669518274463/1664620687209"
+        //              "Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209"
+        var url = "Orders/${idUser.toString().trim()}/${idOrder.toString().trim()}/${idProduct.toString().trim()}"
+        val refer = FirebaseDatabase.getInstance()
+            .getReference(url)
+        Log.d( "URL: ", url.toString())
+        val result = refer.get().await()
+
+        if (result != null) {
+            var order1 = result.getValue(Order::class.java)
+            Log.d( "order1: ", order1.toString())
+            if (order1 == null){
+                try {
+                    refer.setValue(order).await()
+                }catch (e : Exception){
+
+                }
+            }else {
+
+                order1?.apply {
+                    this.totalPrice += price
+                    this.numberOptions += 1
+                    Log.d( "order1 after: ", this.numberOptions.toString()+ " " + this.totalPrice.toString())
+                    try {
+                        FirebaseDatabase.getInstance()
+                            .getReference(url).child("totalPrice").
+                            setValue(this.totalPrice)
+                            .addOnSuccessListener {
+                                Log.d("order1_update", "successfully: ")
+                            }.addOnFailureListener {
+                                Log.d("order1_update", "${it.message.toString()}: ")
+                            }.await()
+                        refer.child("numberOptions").setValue(this.numberOptions).await()
+                        Log.d("ORDER_1","ORDER 1 to firebase")
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        }else {
+            try {
+                refer.setValue(order).await()
+            }catch (e : Exception){
+
+            }
+        }
+    }
     suspend fun getListOrders(idUser : String) : List<Order> {
         val ref = FirebaseDatabase.getInstance().
                                    getReference("Orders").
                                    child(idUser)
-        val res : List<Order> = ref.get().await().children.map {
-                dataSnapshot -> dataSnapshot.getValue(Order::class.java)!!
+        val res : List<String> = ref.get().await().children .map {
+                dataSnapshot -> dataSnapshot.key!!
         }
-        Log.d(Constanst.log, "res :  ${res.size}" )
-        return  res ;
+        var listOrders = mutableListOf<Order>()
+        for (data in res) {
+            val res : List<Order> = ref.child(data).get().await().children.map {
+                dataSnapshot -> dataSnapshot.getValue(Order::class.java)!!
+            }
+            listOrders.addAll(res)
+        }
+        Log.d(Constanst.log, "res :  ${listOrders.size}" )
+        return  listOrders ;
     }
     suspend fun  getListCommentProduct(id : String ): List<Comment> {
         val ref = FirebaseDatabase.getInstance().getReference("Comments").child(id)
@@ -343,6 +438,7 @@ class Repository {
                             user.id = firebaseAuth.currentUser!!.uid
                             updateRegisFirebase(user)
 //                            Log.d("onComplete: ", "VAO 1")
+                            ShareReference.putUser(user)
                             regisLiveData.postValue(firebaseAuth.currentUser)
                         }
                     }

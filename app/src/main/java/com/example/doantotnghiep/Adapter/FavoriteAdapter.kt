@@ -42,7 +42,7 @@ class FavoriteAdapter (var mContext: android.content.Context, val listener : ICl
 
             itemName.text = item.prod?.nameProduct
             itemPrice.text = "Price: " + item.prod?.price.toString()
-            itemNumber.text = "Number : " + item.prod?.number.toString()
+            txtValueNumber.text = "Number : " + item.prod?.number.toString()
             Picasso.with(mContext).load(item.prod?.imgUrl).into(itemProduct)
 
             layoutItem.setOnClickListener {

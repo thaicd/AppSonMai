@@ -18,16 +18,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.CommentAdapter
 import com.example.doantotnghiep.Helper.Constanst
-import com.example.doantotnghiep.Model.Comment
-import com.example.doantotnghiep.Model.Product
-import com.example.doantotnghiep.Model.Rating
-import com.example.doantotnghiep.Model.User
+import com.example.doantotnghiep.Model.*
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.Repository.Time
-import com.example.doantotnghiep.ViewModel.CommentViewModel
-import com.example.doantotnghiep.ViewModel.ProductViewModel
-import com.example.doantotnghiep.ViewModel.RatingViewModel
+import com.example.doantotnghiep.ViewModel.*
 import com.example.doantotnghiep.databinding.ActivityDetailProductBinding
 import com.squareup.picasso.Picasso
 import es.dmoral.toasty.Toasty
@@ -41,17 +36,22 @@ class DetailProductActivity : AppCompatActivity() {
     lateinit var viewModelComment : CommentViewModel
     lateinit var viewModelProduct: ProductViewModel
     lateinit var viewModelRating  : RatingViewModel
+    lateinit var viewModelCart     :CartViewModel
+    lateinit var viewModelOrder     :OrderViewModel
     lateinit var mProduct : Product
     lateinit var user : User
     var flag = 1 ;
     var listComment = mutableListOf<Comment>()
+    var idOrder = System.currentTimeMillis()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_detail_product)
+        viewModelCart = ViewModelProvider(this)[CartViewModel::class.java]
         viewBinding = ActivityDetailProductBinding.inflate(LayoutInflater.from(this))
         viewModelComment = ViewModelProvider(this)[CommentViewModel::class.java]
         viewModelProduct = ViewModelProvider(this)[ProductViewModel::class.java]
         viewModelRating  = ViewModelProvider(this)[RatingViewModel::class.java]
+        viewModelOrder   = ViewModelProvider(this)[OrderViewModel::class.java]
         setContentView(viewBinding.root)
 
         user = ShareReference.getUser()
@@ -59,8 +59,6 @@ class DetailProductActivity : AppCompatActivity() {
 
         if (bundle != null ) {
             mProduct = bundle.getSerializable("product") as Product
-
-
             Picasso.with(this).load(mProduct.imgUrl).into(viewBinding.imageProduct)
             viewBinding.itemName.text = mProduct.nameProduct
             viewBinding.itemPrice.text = mProduct.price.toString()
@@ -81,8 +79,21 @@ class DetailProductActivity : AppCompatActivity() {
             Log.d(Constanst.log, "rate: ${it}")
         })
         viewBinding.btnCart.setOnClickListener {
-
+            var cart = Cart(mProduct,0,0,System.currentTimeMillis().toString(),idOrder.toString())
+            viewModelCart.addCartProduct(user.id!!,mProduct.price!!.toInt(), mProduct.id!!, cart ).observe(this,  Observer{
+                Log.d(Constanst.log, "addCartProduct: finshed ")
+            })
+            Log.d("ID_ORDER", idOrder.toString())
+            var order = Order(idOrder.toString(),user.id!!,mProduct,mProduct.price!!.toInt(),1,1,System.currentTimeMillis().toString())
+            viewModelOrder.addOrdersProduct(user.id!!, idOrder.toString().trim(), mProduct.id!!,order,mProduct.price!!.toInt()).observe(this,
+                Observer {
+                    Log.d(Constanst.log, "addOrdersProduct: finshed ")
+                })
+            Toasty.info(this,"Đã thêm vào giỏ hàng", Toasty.LENGTH_SHORT).show()
         }
+        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
+        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
+        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
         viewBinding.btnRating.setOnClickListener {
             showDialog()
         }

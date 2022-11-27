@@ -1,12 +1,15 @@
 package com.example.doantotnghiep.Customer.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.FavoriteAdapter
 import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.R
@@ -52,6 +55,7 @@ class FavoriteFragment : Fragment() , IClickItem {
         }
         viewModelFavorite = ViewModelProvider(this)[ProductViewModel::class.java]
 
+
         val user = ShareReference.getUser()
         activity?.let {
             it.actionBar?.apply {
@@ -59,10 +63,19 @@ class FavoriteFragment : Fragment() , IClickItem {
             }
             viewModelFavorite.getMyFavoriteProduct(user.id!!).observe(it, Observer {
                 it?.apply {
+                    Log.d("Favorote", it.toString())
                     adapterFavorite.differ.submitList(it)
                     adapterFavorite.notifyDataSetChanged()
                 }
             })
+        }
+        viewBinding?.apply {
+            this.recyclerviewFavorite?.apply {
+                this.adapter = adapterFavorite
+                this.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
+                hasFixedSize()
+                addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+            }
         }
 
         return viewBinding.root

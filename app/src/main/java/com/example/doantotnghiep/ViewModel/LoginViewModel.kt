@@ -33,6 +33,7 @@ class LoginViewModel : ViewModel() {
         if (user != null) {
             val uid = user.uid
             Repository.getRepository().checkLoginAccount(uid,userLoginLiveData)
+            dialog?.dismissDialog()
         }else {
             dialog?.dismissDialog()
         }

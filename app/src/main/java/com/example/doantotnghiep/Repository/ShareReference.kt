@@ -29,7 +29,8 @@ object ShareReference {
         val json = Gson()
 
         val strUser = myReference.getString(USERNAME, "").toString()
-        val res = json.fromJson(strUser, User::class.java)
+        var res = json.fromJson(strUser, User::class.java)
+        if(res == null ) res = User()
         return  res ;
     }
 }

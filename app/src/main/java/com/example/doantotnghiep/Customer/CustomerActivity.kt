@@ -13,7 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.CategoryAdapter
+import com.example.doantotnghiep.Customer.Fragment.CartFragment
+import com.example.doantotnghiep.Customer.Fragment.FavoriteFragment
 import com.example.doantotnghiep.Customer.Fragment.HomeFragment
+import com.example.doantotnghiep.Customer.Fragment.OrderFragment
 import com.example.doantotnghiep.Helper.Constanst
 import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.IClickItem
@@ -50,8 +53,17 @@ class CustomerActivity : AppCompatActivity() {
                     Toasty.info(this, "Home", Toasty.LENGTH_SHORT).show()
                 }
                 1 -> {
-                    Toasty.info(this, "Cart", Toasty.LENGTH_SHORT).show()
+                    Toasty.info(this, "Favorite", Toasty.LENGTH_SHORT).show()
+                    replaceFragment(FavoriteFragment())
 
+                }
+                2 -> {
+                    Toasty.info(this, "Cart", Toasty.LENGTH_SHORT).show()
+                    replaceFragment(CartFragment())
+                }
+                3 -> {
+                    Toasty.info(this, "Order", Toasty.LENGTH_SHORT).show()
+                    replaceFragment(OrderFragment())
                 }
                 else ->{
                     showDialog()

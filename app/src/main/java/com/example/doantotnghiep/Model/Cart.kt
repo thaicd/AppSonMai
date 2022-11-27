@@ -6,6 +6,7 @@ data class Cart(
     var prod : Product?= null ,
     var totalPrice : Int = 0 ,
     var numberChoice : Int = 0 ,
-    var timeStamp : String?= null
+    var timeStamp : String?= null,
+    var idOrder : String ?= null
 
 )

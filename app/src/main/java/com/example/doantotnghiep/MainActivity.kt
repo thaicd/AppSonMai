@@ -23,16 +23,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var dialog              : CustomProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         dialog = CustomProgressBar(this@MainActivity)
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         dialog.showProgressBar(this)
         super.onCreate(savedInstanceState)
-
-
+        loginViewModel.checkLoginSession(dialog)
         viewBindingActivity = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBindingActivity.root)
-
-        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        loginViewModel.checkLoginSession(dialog)
-
         loginViewModel.getuserLoginLiveData().observe(this, object : Observer<User> {
             override fun onChanged(t: User?) {
                 if (t != null)
@@ -59,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        /*
         loginViewModel.getloginLiveData().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(t: FirebaseUser?) {
                 if (t != null ) {
@@ -68,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+         */
         viewBindingActivity.btnRegister.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 val intent = Intent(this@MainActivity, RegisterActivity::class.java)

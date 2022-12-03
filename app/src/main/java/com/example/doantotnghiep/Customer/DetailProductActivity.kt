@@ -6,24 +6,31 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.CommentAdapter
 import com.example.doantotnghiep.Helper.Constanst
+import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.Model.*
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.Repository.Time
 import com.example.doantotnghiep.ViewModel.*
 import com.example.doantotnghiep.databinding.ActivityDetailProductBinding
+import com.example.doantotnghiep.databinding.LayoutRatingBinding
 import com.squareup.picasso.Picasso
 import es.dmoral.toasty.Toasty
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -38,31 +45,41 @@ class DetailProductActivity : AppCompatActivity() {
     lateinit var viewModelRating  : RatingViewModel
     lateinit var viewModelCart     :CartViewModel
     lateinit var viewModelOrder     :OrderViewModel
+    lateinit var loadingProductDetail : CustomProgressBar
     lateinit var mProduct : Product
     lateinit var user : User
     var flag = 1 ;
     var listComment = mutableListOf<Comment>()
-    var idOrder = System.currentTimeMillis()
+    var idOrder = Time.convertTimeDate(System.currentTimeMillis())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_detail_product)
+        loadingProductDetail = CustomProgressBar(this)
         viewModelCart = ViewModelProvider(this)[CartViewModel::class.java]
         viewBinding = ActivityDetailProductBinding.inflate(LayoutInflater.from(this))
         viewModelComment = ViewModelProvider(this)[CommentViewModel::class.java]
         viewModelProduct = ViewModelProvider(this)[ProductViewModel::class.java]
         viewModelRating  = ViewModelProvider(this)[RatingViewModel::class.java]
         viewModelOrder   = ViewModelProvider(this)[OrderViewModel::class.java]
+        loadingProductDetail.showProgressBar(this)
         setContentView(viewBinding.root)
-
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (loadingProductDetail.isShowing())loadingProductDetail.dismissDialog()
+        }, 1000)
         user = ShareReference.getUser()
         val bundle = intent.extras
-
+        Log.d("ID_ORDER = ", idOrder.toString())
         if (bundle != null ) {
             mProduct = bundle.getSerializable("product") as Product
+            supportActionBar?.apply {
+                title = mProduct.nameProduct
+                setDisplayHomeAsUpEnabled(true)
+            }
             Picasso.with(this).load(mProduct.imgUrl).into(viewBinding.imageProduct)
             viewBinding.itemName.text = mProduct.nameProduct
             viewBinding.itemPrice.text = mProduct.price.toString()
             viewBinding.itemDescription.text = mProduct.description.toString()
+            viewBinding.numberStar.text= mProduct.rate!!.toString()
             viewModelProduct.getStatusFavorite(user.id!!,mProduct.id!!).observe(this, Observer {
                 Log.d(Constanst.log, "status []: ${it} ")
                 if (it == 1) {
@@ -79,21 +96,33 @@ class DetailProductActivity : AppCompatActivity() {
             Log.d(Constanst.log, "rate: ${it}")
         })
         viewBinding.btnCart.setOnClickListener {
-            var cart = Cart(mProduct,0,0,System.currentTimeMillis().toString(),idOrder.toString())
-            viewModelCart.addCartProduct(user.id!!,mProduct.price!!.toInt(), mProduct.id!!, cart ).observe(this,  Observer{
-                Log.d(Constanst.log, "addCartProduct: finshed ")
+
+            viewModelProduct.getNumberProduct(mProduct.id!!).observe(this@DetailProductActivity,
+            Observer {
+                it?.apply {
+                    if(it > 0) {
+                        var cart = Cart(mProduct,0,0,System.currentTimeMillis().toString(),idOrder.toString())
+                        viewModelCart.addCartProduct(user.id!!,mProduct.price!!.toInt(), mProduct.id!!, cart ).observe(
+                            this@DetailProductActivity,  Observer{
+                            Log.d(Constanst.log, "addCartProduct: finshed ")
+                        })
+
+                        val number = it - 1;
+                        viewModelProduct.editNumberProduct(mProduct.id!!, number)
+                            .observe(this@DetailProductActivity,
+                                Observer {
+                                    Log.d("editNumberProduct:", " editNumberProduct Successfully")
+                                })
+                            Toasty.info(this@DetailProductActivity,"Đã thêm vào giỏ hàng",
+                            Toasty.LENGTH_SHORT).show()
+                    }else {
+                        Toasty.error(this@DetailProductActivity,"This item is empty!",
+                        Toasty.LENGTH_SHORT).show()
+                    }
+                }
             })
-            Log.d("ID_ORDER", idOrder.toString())
-            var order = Order(idOrder.toString(),user.id!!,mProduct,mProduct.price!!.toInt(),1,1,System.currentTimeMillis().toString())
-            viewModelOrder.addOrdersProduct(user.id!!, idOrder.toString().trim(), mProduct.id!!,order,mProduct.price!!.toInt()).observe(this,
-                Observer {
-                    Log.d(Constanst.log, "addOrdersProduct: finshed ")
-                })
-            Toasty.info(this,"Đã thêm vào giỏ hàng", Toasty.LENGTH_SHORT).show()
         }
-        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
-        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
-        //Orders/lcEQWgtRiqfM4ijc8T3aliUs3Uk2/1669519313505/1664620687209
+
         viewBinding.btnRating.setOnClickListener {
             showDialog()
         }
@@ -139,19 +168,28 @@ class DetailProductActivity : AppCompatActivity() {
 
             it?.apply {
                 Log.d(Constanst.log, "list comment : ${this} ")
-
                 listComment.clear()
                 listComment.addAll(this)
-
                 adapterComment.notifyDataSetChanged()
 
+            }
+        })
+        viewModelRating.liveDataRatingAvarage1().observe(this, Observer {
+            it?.apply {
+                viewBinding.numberStar.text = it.toDouble().toString()
+                viewModelProduct.editRatingProduct(mProduct.id!!,it.toDouble()).
+                observe(this@DetailProductActivity,
+                    Observer {
+                        Log.d("viewModelRating: ", it.toString())
+                    })
             }
         })
 
     }
     fun showDialog() {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_rating)
+        val binding = LayoutRatingBinding.inflate(LayoutInflater.from(this))
+        dialog.setContentView(binding.root)
 
         val window = dialog.window
         if (window == null ) return
@@ -160,36 +198,40 @@ class DetailProductActivity : AppCompatActivity() {
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window.setGravity(Gravity.CENTER)
         dialog.setCancelable(true)
-        val edtFeedback = dialog.findViewById<EditText>(R.id.edt_feedback)
-        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
-        val btnSend = dialog.findViewById<TextView>(R.id.btn_send)
-        val rate = dialog.findViewById<MaterialRatingBar>(R.id.item_rate)
 
-        val feedback = edtFeedback.text.toString().trim()
+
+
+
         var numberRate : Float = (0).toFloat()
-        rate.setOnRatingChangeListener { ratingBar, rating ->
+        binding.itemRate.setOnRatingChangeListener { ratingBar, rating ->
             numberRate = rating
         }
-        btnSend.setOnClickListener {
+        binding.btnSend.setOnClickListener {
+            val feedback = binding.edtFeedback.text.trim()
+            Log.d("SEND_COMMENT", "SEND_COMMENT : RATING")
             val rate = Rating(System.currentTimeMillis().toString(), numberRate, user.id!!)
             viewModelRating.addGetRating(mProduct.id!!, rate)
+            viewModelRating.getRating(mProduct.id!!)
+
+            Log.d("SEND_COMMENT", "SEND_COMMENT : RATING1 - length = " + feedback.length + " feedback = " + feedback )
             if(feedback.length > 0 ) {
+                Log.d("SEND_COMMENT", feedback.toString())
                 val time = Time.convertTimstampToDate()
                 val comment =
-                    Comment(System.currentTimeMillis().toString(), user.name, feedback, time)
+                    Comment(System.currentTimeMillis().toString(), user.name, feedback.toString(), time)
                 viewModelComment.addComment(mProduct.id!!, comment.idComment!!, comment)
                     .observe(this, Observer {
-
+                        it?.apply {
+                            Log.d("COMMENT", it.toString())
+                        }
                     })
             }
             dialog.dismiss()
         }
-        btnCancel.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
-
-
 
     }
 }

@@ -30,6 +30,15 @@ class Repository {
         val ref : DatabaseReference = FirebaseDatabase.getInstance().getReference("Accounts").child(user.id!!)
         ref.setValue(user)
     }
+    fun removeProductCart( idUser: String, livedata: MutableLiveData<Boolean>) {
+        val refer = FirebaseDatabase.getInstance()
+            .getReference("Carts/${idUser}")
+        refer.removeValue().addOnSuccessListener {
+            livedata.postValue(true)
+        }.addOnFailureListener {
+            livedata.postValue(false)
+        }
+    }
     suspend fun addProductCart (idUser: String,totalProduct: Int , idProduct: String, cart: Cart) {
 
         val refer = FirebaseDatabase.getInstance()
@@ -99,7 +108,6 @@ class Repository {
                     livedata.postValue(user)
                 }
             }
-
             override fun onCancelled(p0: DatabaseError) {
                 livedata.postValue(null)
             }
@@ -343,6 +351,7 @@ class Repository {
         val res : List<String> = ref.get().await().children .map {
                 dataSnapshot -> dataSnapshot.key!!
         }
+        Log.d("listkeyorders", res.toString())
         var listOrders = mutableListOf<Order>()
         for (data in res) {
             val res : List<Order> = ref.child(data).get().await().children.map {
@@ -403,7 +412,36 @@ class Repository {
         }
         return f
     }
-
+    suspend fun editRatingProduct(idProduct: String, rate : Double) : Boolean {
+        val refs = FirebaseDatabase.getInstance().getReference("Products").child(idProduct).child("rate")
+        var f = true
+        try {
+            refs.setValue(rate).await()
+        } catch (e: Exception) {
+            f = false
+        }
+        return f
+    }
+    suspend fun editNumberProduct(idProduct: String, number: Int) : Boolean {
+        val refs = FirebaseDatabase.getInstance().getReference("Products").child(idProduct).child("number")
+        var f = true
+        try {
+            refs.setValue(number).await()
+        } catch (e: Exception) {
+            f = false
+        }
+        return f
+    }
+    suspend fun getNumberProduct(idProduct: String) : Int{
+        val refs = FirebaseDatabase.getInstance().getReference("Products/${idProduct}")
+        var res = refs.get().await()
+        if (res == null ) return  0
+//        res?.apply {
+            val product = res.getValue(Product::class.java)
+            if (product == null ) return  0
+            return product.number!!
+//        }
+    }
     fun getListUsers(liveData : MutableLiveData<MutableList<User>>) {
 //        listUsers.clear()
         val ref = FirebaseDatabase.getInstance().getReference("Accounts")

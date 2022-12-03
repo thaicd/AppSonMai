@@ -3,6 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_customer.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_detail_product.xml" value="0.12273550724637682" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_list_product.xml" value="0.2" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_cart.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_favorite.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_order.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_cart.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_detail_order.xml" value="0.12916666666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_favorite.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_orders.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_product.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_cart.xml" value="0.253125" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_favorite.xml" value="0.253125" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_order.xml" value="0.253125" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_product.xml" value="0.253125" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/layout_rating.xml" value="0.2" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/AppSonMai/app/src/main/res/drawable/bg_button_add.xml" value="0.1395" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/AppSonMai/app/src/main/res/drawable/bg_dialog.xml" value="0.1395" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/AppSonMai/app/src/main/res/drawable/bg_item_category.xml" value="0.102" />

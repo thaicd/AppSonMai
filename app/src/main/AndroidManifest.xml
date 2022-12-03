@@ -27,9 +27,11 @@
             android:name=".Customer.OrderCustomerActivity"
             android:exported="false" />
         <activity
+            android:parentActivityName=".Customer.ListProductForCustomerActivity"
             android:name=".Customer.DetailProductActivity"
             android:exported="false" />
         <activity
+            android:parentActivityName=".Customer.CustomerActivity"
             android:name=".Customer.ListProductForCustomerActivity"
             android:exported="false" />
         <activity

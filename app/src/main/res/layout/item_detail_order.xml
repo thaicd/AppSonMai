@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
-    android:id="@+id/layout_item"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="10dp">
-
+    android:layout_height="170dp">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/layout_item"
+        android:weightSum="2"
         android:orientation="horizontal"
-        android:weightSum="3">
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <ImageView
-            android:id="@+id/item_product"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/img_product"
+            android:layout_marginLeft="10dp"
+            android:padding="13dp"
             android:layout_gravity="center_vertical"
-            android:padding="10dp"></ImageView>
-
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+        </ImageView>
         <LinearLayout
+            android:orientation="vertical"
+            android:padding="13dp"
+            android:layout_weight="2"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2.5"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/item_name"
                 android:layout_width="match_parent"
@@ -37,16 +32,14 @@
                 android:textStyle="bold">
 
             </TextView>
-
             <TextView
                 android:id="@+id/item_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="Price"
+                android:text="Total Price"
                 android:textSize="20sp"
                 android:textStyle="bold">
-
             </TextView>
 
             <TextView
@@ -58,29 +51,28 @@
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
             <LinearLayout
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:weightSum="2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:layout_marginTop="5dp"
                     android:src="@drawable/ic_baseline_star_24"
                     android:layout_width="30dp"
                     android:layout_height="30dp">
                 </ImageView>
-
                 <TextView
-                    android:padding="6dp"
-                    android:id="@+id/item_star_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Number"
+                    android:id="@+id/item_rate"
+                    android:layout_marginLeft="5dp"
                     android:textSize="20sp"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold"
+                    android:text="5"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </TextView>
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

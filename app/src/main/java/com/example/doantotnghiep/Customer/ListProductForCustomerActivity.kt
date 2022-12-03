@@ -3,14 +3,17 @@ package com.example.doantotnghiep.Customer
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.ProductAdapter
 import com.example.doantotnghiep.Helper.Constanst
+import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.Model.Category
 import com.example.doantotnghiep.Model.Product
@@ -23,43 +26,45 @@ class ListProductForCustomerActivity : AppCompatActivity() , IClickItem{
     lateinit var adapterP : ProductAdapter
     lateinit var cateProduct : Category
     lateinit var viewModelProduct : ProductViewModel
+    lateinit var loadingProduct : CustomProgressBar
     var listProduct = mutableListOf<Product>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadingProduct = CustomProgressBar(this)
         viewBinding = ActivityListProductBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
-        Log.d(Constanst.log
-            , "category ")
+
         val bundle = intent.extras
-
-        if(bundle != null  ) {
-
-            cateProduct = bundle.getSerializable("object") as Category
-            Log.d(Constanst.log
-                , "cate :${cateProduct} ")
-        }else {
-            Log.d(Constanst.log
-                , "not cate  ")
+        supportActionBar?.apply {
+            title = "List Production"
+            setDisplayHomeAsUpEnabled(true)
         }
-
+        if(bundle != null  ) {
+            cateProduct = bundle.getSerializable("object") as Category
+        }else {
+            cateProduct = CustomerActivity.mCategory
+        }
+        viewBinding.loadingProduct.visibility = View.VISIBLE
         adapterP = ProductAdapter(this, this)
         viewModelProduct = ViewModelProvider(this)[ProductViewModel::class.java]
 
         viewModelProduct.responseLiveData.observe(this, Observer {
             it?.apply {
-
                 listProduct.clear()
                 for (p in it ) {
-                    Log.d(Constanst.log
-                        , "after :${p.id} - ${cateProduct.id}")
                     if (p.idCategory.equals(cateProduct.id) ) {
                         listProduct.add(p)
                     }
                 }
-                Log.d(Constanst.log
-                    , "list after :${listProduct} ")
-                adapterP.differ.submitList(listProduct)
-                adapterP.notifyDataSetChanged()
+                if (listProduct.size > 0) {
+                    adapterP.differ.submitList(listProduct)
+                    adapterP.notifyDataSetChanged()
+                    viewBinding.layoutShimmer.stopShimmer()
+                    viewBinding.layoutShimmer.visibility = View.GONE
+                }else {
+                    viewBinding.labelData.text = "Not Data"
+                }
+                viewBinding.loadingProduct.visibility = View.INVISIBLE
             }
         })
 
@@ -71,6 +76,7 @@ class ListProductForCustomerActivity : AppCompatActivity() , IClickItem{
             addItemDecoration(DividerItemDecoration(this@ListProductForCustomerActivity,
                 DividerItemDecoration.VERTICAL))
         }
+        viewBinding.layoutShimmer.startShimmer()
     }
 
     override fun getPosition(index: Int) {

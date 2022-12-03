@@ -102,7 +102,7 @@ class AddProductActivity : AppCompatActivity() {
 
                 progress.showProgressBar(this)
                 viewModel.addData(Product(System.currentTimeMillis().toString(), listCategory.get(mIndex).id,nameP,priceP.toDouble(),
-                    numP.toInt(),description,0, linkPath,1)).observe(this, object :Observer<Boolean>{
+                    numP.toInt(),description,0.0, linkPath,1)).observe(this, object :Observer<Boolean>{
                     override fun onChanged(t: Boolean?) {
                         if (t == true) {
                             mIndex = -1 ;

@@ -1,6 +1,8 @@
 package com.example.doantotnghiep.Customer.Fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.FavoriteAdapter
+import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.Repository.ShareReference
@@ -43,13 +46,24 @@ class FavoriteFragment : Fragment() , IClickItem {
     lateinit var viewBinding : FragmentFavoriteBinding
     lateinit var adapterFavorite : FavoriteAdapter
     lateinit var viewModelFavorite : ProductViewModel
+    lateinit var loadingFavorite  : CustomProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         viewBinding = FragmentFavoriteBinding.inflate(LayoutInflater.from(context))
+        activity?.apply {
+            loadingFavorite = CustomProgressBar(this)
+            //loadingFavorite.showProgressBar(this)
+        }
+        viewBinding.loadingData.visibility = View.VISIBLE
+
+
         context?.let {
+
             adapterFavorite = FavoriteAdapter(it, this)
 
         }
@@ -62,11 +76,22 @@ class FavoriteFragment : Fragment() , IClickItem {
                 title = "Favorite Product"
             }
             viewModelFavorite.getMyFavoriteProduct(user.id!!).observe(it, Observer {
-                it?.apply {
-                    Log.d("Favorote", it.toString())
-                    adapterFavorite.differ.submitList(it)
-                    adapterFavorite.notifyDataSetChanged()
+                if (it == null ) {
+                    viewBinding.labelData.visibility = View.VISIBLE
+
+                }else if (it.size == 0) {
+                    viewBinding.labelData.visibility = View.VISIBLE
+                }else {
+                    viewBinding.labelData.visibility = View.GONE
+                    it?.apply {
+                        Log.d("Favorote", it.toString())
+                        viewBinding.skimmerLayout.stopShimmer()
+                        viewBinding.skimmerLayout.visibility = View.GONE
+                        adapterFavorite.differ.submitList(it)
+                        adapterFavorite.notifyDataSetChanged()
+                    }
                 }
+                viewBinding.loadingData.visibility = View.INVISIBLE
             })
         }
         viewBinding?.apply {
@@ -77,7 +102,7 @@ class FavoriteFragment : Fragment() , IClickItem {
                 addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
             }
         }
-
+        viewBinding.skimmerLayout.startShimmer()
         return viewBinding.root
     }
 

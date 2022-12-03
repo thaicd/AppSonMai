@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.CategoryAdapter
+import com.example.doantotnghiep.Customer.CustomerActivity.Companion.mCategory
 import com.example.doantotnghiep.Customer.ListProductForCustomerActivity
 import com.example.doantotnghiep.Helper.Constanst
 import com.example.doantotnghiep.Helper.CustomProgressBar
@@ -57,9 +58,8 @@ class HomeFragment : Fragment() , IClickItem {
         // Inflate the layout for this fragment
 
         viewBinding = FragmentHomeBinding.inflate(LayoutInflater.from(context))
-         activity?.let {progress = CustomProgressBar(it) }
-        activity?.let { progress.showProgressBar(it) }
 
+        viewBinding.loadingCategory.visibility = View.VISIBLE
         activity?.apply {
             actionBar?.apply {
                 title = "List Category"
@@ -75,7 +75,9 @@ class HomeFragment : Fragment() , IClickItem {
                     mListCategory.clear()
                     mListCategory.addAll(it)
                     adapterCate.notifyDataSetChanged()
-                    progress.dismissDialog()
+                    viewBinding.shimmerLayoutCategory.stopShimmer()
+                    viewBinding.shimmerLayoutCategory.visibility = View.GONE
+                    viewBinding.loadingCategory.visibility = View.GONE
                 }
             })
         }
@@ -86,7 +88,7 @@ class HomeFragment : Fragment() , IClickItem {
         }
 //        mListCategory.add(Category(System.currentTimeMillis().toString(),"Category 1"))
 //        adapterCate.notifyDataSetChanged()
-
+        viewBinding.shimmerLayoutCategory.startShimmer()
         return viewBinding.root
     }
     override fun getPosition(index: Int) {
@@ -97,6 +99,7 @@ class HomeFragment : Fragment() , IClickItem {
                 val intent = Intent(activity, ListProductForCustomerActivity::class.java)
                 val bundle = Bundle()
                 bundle.putSerializable("object", mListCategory[index])
+                mCategory = mListCategory[index]
                 intent.putExtras(bundle)
                 startActivity(intent)
                 context?.let { it1 -> Toasty.info(it1, " Có sản phẩm", Toasty.LENGTH_SHORT).show() }
@@ -106,11 +109,6 @@ class HomeFragment : Fragment() , IClickItem {
         })
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of

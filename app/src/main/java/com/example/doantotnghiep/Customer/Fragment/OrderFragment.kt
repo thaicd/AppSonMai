@@ -1,6 +1,8 @@
 package com.example.doantotnghiep.Customer.Fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.OrdersAdapter
+import com.example.doantotnghiep.Customer.CustomerActivity
+import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.Model.Order
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.OrderViewModel
 import com.example.doantotnghiep.databinding.FragmentOrderBinding
@@ -42,25 +47,21 @@ class OrderFragment : Fragment() , IClickItem {
     lateinit var binding : FragmentOrderBinding
     lateinit var viewModelOrders : OrderViewModel
     lateinit var ordersAdapter: OrdersAdapter
+    var listOrders = mutableListOf<Order>()
     var uid = FirebaseAuth.getInstance().currentUser!!.uid
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        activity?.apply {
-            ordersAdapter = OrdersAdapter(this,this@OrderFragment)
-            viewModelOrders = ViewModelProvider(this)[OrderViewModel::class.java]
-            viewModelOrders.getListOrders(uid).observe(this, Observer {
-                if (it != null && it.size > 0) {
-                    Log.d("orders", it.toString())
-                    ordersAdapter.differ.submitList(it)
-                    ordersAdapter.notifyDataSetChanged()
-                }
-            })
+        activity?.apply {  ordersAdapter = OrdersAdapter(listOrders,this,this@OrderFragment)
+            //loadingOrder = CustomProgressBar(this)
+            //loadingOrder.showProgressBar(this)
         }
+
         binding = FragmentOrderBinding.inflate(LayoutInflater.from(context))
         binding?.apply {
+            this.loadingData.visibility = View.VISIBLE
             this.recyclerviewOrder?.apply {
                 hasFixedSize()
                 adapter = ordersAdapter
@@ -68,11 +69,29 @@ class OrderFragment : Fragment() , IClickItem {
                 addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.VERTICAL))
             }
         }
+        activity?.apply {
 
-
-
-
-
+            viewModelOrders = ViewModelProvider(this)[OrderViewModel::class.java]
+            viewModelOrders.getListOrders(uid).observe(this, Observer {
+                if (it != null && it.size > 0) {
+                    binding.labelData.visibility = View.GONE
+                    listOrders.clear()
+                    Log.d("orders", it.size.toString())
+                    for (data in it) {
+                        Log.d( "DATA: ", data.toString())
+                        listOrders.add(data)
+                    }
+                    ordersAdapter.notifyDataSetChanged()
+                    binding.loadingData.visibility = View.INVISIBLE
+                }else{
+                    binding.labelData.visibility = View.VISIBLE
+                    binding.loadingData.visibility = View.INVISIBLE
+                }
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.visibility = View.GONE
+            })
+        }
+        binding.shimmerLayout.startShimmer()
         return binding.root
     }
 

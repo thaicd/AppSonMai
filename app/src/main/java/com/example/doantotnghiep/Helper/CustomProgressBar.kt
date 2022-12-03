@@ -39,4 +39,8 @@ class CustomProgressBar {
     fun dismissDialog() {
         dialog?.dismiss()
     }
+    fun isShowing() : Boolean{
+        if(dialog == null ) return false
+        return dialog.isShowing
+    }
 }

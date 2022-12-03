@@ -10,4 +10,9 @@ object Time {
         val timeNow = sdf.format(System.currentTimeMillis())
         return timeNow
     }
+    fun convertTimeDate(time : Long) : String {
+        val sdf = SimpleDateFormat("yyyyMMdd")
+        val timeNow = sdf.format(time)
+        return timeNow
+    }
 }

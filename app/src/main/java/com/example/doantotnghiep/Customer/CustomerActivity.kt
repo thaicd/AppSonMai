@@ -22,6 +22,8 @@ import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.MainActivity
 import com.example.doantotnghiep.Model.Category
+import com.example.doantotnghiep.Model.Order
+import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.CategoryViewModel
 import com.example.doantotnghiep.databinding.ActivityCustomerBinding
@@ -29,7 +31,11 @@ import com.google.firebase.auth.FirebaseAuth
 import es.dmoral.toasty.Toasty
 
 class CustomerActivity : AppCompatActivity() {
-
+    companion object {
+        var mCategory : Category = Category()
+        var mProduct  : Product  = Product()
+        var mOrder    : Order    = Order()
+    }
     lateinit var viewBindingCustomer : ActivityCustomerBinding
     lateinit var adapterCate : CategoryAdapter
     lateinit var viewModelCate : CategoryViewModel
@@ -43,26 +49,42 @@ class CustomerActivity : AppCompatActivity() {
         setContentView(viewBindingCustomer.root)
         supportActionBar?.apply {
             title = "List Category"
-            setDisplayHomeAsUpEnabled(true)
+
         }
 
         viewBindingCustomer.bottomBar.setOnItemSelectedListener {
             when(it) {
                 0 -> {
+                    supportActionBar?.apply {
+                        title = "List Category"
+
+                    }
                     replaceFragment(HomeFragment())
-                    Toasty.info(this, "Home", Toasty.LENGTH_SHORT).show()
+                   // Toasty.info(this, "Home", Toasty.LENGTH_SHORT).show()
                 }
                 1 -> {
-                    Toasty.info(this, "Favorite", Toasty.LENGTH_SHORT).show()
+                    //Toasty.info(this, "Favorite", Toasty.LENGTH_SHORT).show()
+                    supportActionBar?.apply {
+                        title = "My Favorite"
+
+                    }
                     replaceFragment(FavoriteFragment())
 
                 }
                 2 -> {
-                    Toasty.info(this, "Cart", Toasty.LENGTH_SHORT).show()
+                   // Toasty.info(this, "Cart", Toasty.LENGTH_SHORT).show()
+                    supportActionBar?.apply {
+                        title = "My Cart"
+
+                    }
                     replaceFragment(CartFragment())
                 }
                 3 -> {
-                    Toasty.info(this, "Order", Toasty.LENGTH_SHORT).show()
+                  //  Toasty.info(this, "Order", Toasty.LENGTH_SHORT).show()
+                    supportActionBar?.apply {
+                        title = "My Order"
+
+                    }
                     replaceFragment(OrderFragment())
                 }
                 else ->{

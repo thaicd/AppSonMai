@@ -3,6 +3,8 @@ package com.example.doantotnghiep
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -15,18 +17,24 @@ import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.ViewModel.LoginViewModel
 import com.example.doantotnghiep.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import es.dmoral.toasty.Toasty
 
 class MainActivity : AppCompatActivity() {
     lateinit var viewBindingActivity : ActivityMainBinding
     lateinit var loginViewModel      : LoginViewModel
     lateinit var dialog              : CustomProgressBar
+    var mAuth  = FirebaseAuth.getInstance().currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         dialog = CustomProgressBar(this@MainActivity)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         dialog.showProgressBar(this)
         super.onCreate(savedInstanceState)
         loginViewModel.checkLoginSession(dialog)
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing()) dialog.dismissDialog()
+        },1000)
         viewBindingActivity = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBindingActivity.root)
         loginViewModel.getuserLoginLiveData().observe(this, object : Observer<User> {
@@ -39,34 +47,37 @@ class MainActivity : AppCompatActivity() {
 
                             val intent = Intent(this@MainActivity, HomeAdminActivity::class.java)
                             startActivity(intent)
+                            finish()
                         }
                         2 -> {
 //                            dialog.dismissDialog()
                             ShareReference.putUser(t)
                             val intent = Intent(this@MainActivity, CustomerActivity::class.java)
                             startActivity(intent)
+                            finish()
                         }
                         else -> {
-//                            dialog.dismissDialog()
-
+                           dialog.dismissDialog()
                         }
                     }
+                }else {
+                    dialog.dismissDialog()
+                    Toasty.error(this@MainActivity,"Login isn't successful")
                 }
             }
 
         })
-        /*
         loginViewModel.getloginLiveData().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(t: FirebaseUser?) {
                 if (t != null ) {
                     loginViewModel.checkLoginSession(dialog)
                 }else {
+                    dialog?.dismissDialog()
                     Toast.makeText(this@MainActivity, " Tài khoản hoặc mật khẩu của bạn không đúng", Toast.LENGTH_SHORT).show()
                 }
             }
         })
 
-         */
         viewBindingActivity.btnRegister.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 val intent = Intent(this@MainActivity, RegisterActivity::class.java)
@@ -87,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
                 dialog.showProgressBar(this@MainActivity)
-                loginViewModel.login(strUser,strPass) ;
+                loginViewModel.login(strUser,strPass)
 
             }
 

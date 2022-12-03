@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 //    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
 
 

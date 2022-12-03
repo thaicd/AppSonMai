@@ -6,8 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".Admin.ListProductActivity">
     <androidx.recyclerview.widget.RecyclerView
+        android:padding="13dp"
         android:id="@+id/recycler_product"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </androidx.recyclerview.widget.RecyclerView>
+    <ProgressBar
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/loading_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+    </ProgressBar>
+    <TextView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/label_data"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlCompat">
+    </TextView>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/layout_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/item_shimmer_product"></include>
+            <include layout="@layout/item_shimmer_product"></include>
+            <include layout="@layout/item_shimmer_product"></include>
+            <include layout="@layout/item_shimmer_product"></include>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

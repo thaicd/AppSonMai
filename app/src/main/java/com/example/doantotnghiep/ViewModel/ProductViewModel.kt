@@ -32,4 +32,13 @@ class ProductViewModel : ViewModel() {
     fun getStatusFavorite(idUser: String, idProduct: String) = liveData {
         emit(Repository.getRepository().getStatusFavoriteProduct(idUser,idProduct))
     }
+    fun editRatingProduct(idProduct: String , data : Double) = liveData {
+        emit(Repository.getRepository().editRatingProduct(idProduct,data))
+    }
+    fun editNumberProduct(idProduct: String, number: Int) = liveData {
+        emit(Repository.getRepository().editNumberProduct(idProduct,number))
+    }
+    fun getNumberProduct(idProduct: String) = liveData {
+        emit(Repository.getRepository().getNumberProduct(idProduct))
+    }
 }

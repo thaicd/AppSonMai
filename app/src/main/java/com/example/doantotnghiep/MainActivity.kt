@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         loginViewModel.getloginLiveData().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(t: FirebaseUser?) {
                 if (t != null ) {
-                    //loginViewModel.checkLoginSession(dialog)
+                    loginViewModel.checkLoginSession(dialog)
                 }else {
                     dialog?.dismissDialog()
                     Toast.makeText(this@MainActivity, " Tài khoản hoặc mật khẩu của bạn không đúng", Toast.LENGTH_SHORT).show()

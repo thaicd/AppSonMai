@@ -3,21 +3,55 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/background_card.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/background_color.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/custom_inputtext.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/ic_baseline_email_24.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/ic_baseline_lock_24.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable-v24/ic_baseline_supervised_user_circle_24.xml" value="0.145" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable/custom_button_order.xml" value="0.215" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable/custom_edit_text.xml" value="0.1395" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable/dialog_bottom_radio.xml" value="0.152" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1395" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/drawable/indicator_viewpager.xml" value="0.12" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_add_product.xml" value="0.128" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_admin_shop.xml" value="0.23854166666666668" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_customer.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_detail_order_admin.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_detail_product.xml" value="0.12273550724637682" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_home_admin.xml" value="0.176" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_list_product.xml" value="0.2" />
-        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_cart.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_list_shop_and_user.xml" value="0.23854166666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_list_user.xml" value="0.12916666666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_order_details.xml" value="0.12916666666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_order_product_admin.xml" value="0.176" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_order_sold_admin.xml" value="0.12916666666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_register.xml" value="0.23854166666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_remove_user.xml" value="0.22447916666666667" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/activity_reset_password.xml" value="0.13489583333333333" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/custom_dialog.xml" value="0.1160081053698075" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/custom_dialog_options.xml" value="0.2" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/custom_dialog_shop.xml" value="0.2375" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/custom_layout_process.xml" value="0.23854166666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_cart.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_favorite.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/fragment_order.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_cart.xml" value="0.25416666666666665" />
-        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_detail_order.xml" value="0.12916666666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_comment.xml" value="0.11302083333333333" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_detail_order.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_favorite.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_image.xml" value="0.253125" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_orders.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_product.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_remove_shop.xml" value="0.2375" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_cart.xml" value="0.253125" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_favorite.xml" value="0.253125" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_order.xml" value="0.253125" />
-        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_product.xml" value="0.253125" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_shimmer_product.xml" value="0.152" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/item_user.xml" value="0.23854166666666668" />
+        <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/layout_login.xml" value="0.13385416666666666" />
         <entry key="..\:/AndroidStudio/AppSonMai/app/src/main/res/layout/layout_rating.xml" value="0.2" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/AppSonMai/app/src/main/res/drawable/bg_button_add.xml" value="0.1395" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/AppSonMai/app/src/main/res/drawable/bg_dialog.xml" value="0.1395" />

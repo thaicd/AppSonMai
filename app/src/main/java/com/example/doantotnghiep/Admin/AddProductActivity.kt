@@ -17,6 +17,7 @@ import com.example.doantotnghiep.Helper.CustomProgressBar
 import com.example.doantotnghiep.Model.Category
 import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.R
+import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.ViewModel.CategoryViewModel
 import com.example.doantotnghiep.ViewModel.ProductViewModel
 import com.example.doantotnghiep.databinding.ActivityAddProductBinding
@@ -43,9 +44,12 @@ class AddProductActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         viewModelCat = ViewModelProvider(this)[CategoryViewModel::class.java]
-
-        supportActionBar?.setTitle("Add Product")
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        viewBinding.toolbar.setTitle("Add Product")
+        setSupportActionBar(viewBinding.toolbar)
+        supportActionBar?.apply {
+            this.setDisplayShowHomeEnabled(true)
+            this.setDisplayHomeAsUpEnabled(true);
+        }
 
         viewModelCat.getListCategory().observe(this, Observer {
             if (it != null)
@@ -56,6 +60,7 @@ class AddProductActivity : AppCompatActivity() {
                 for (data in it ) {
                     listString.add(data.id+". "+data.name)
                 }
+                /*
                 viewBinding.spinnerData.setItems(listString)
                 viewBinding.spinnerData.show() // show the spinner popup.
 
@@ -63,6 +68,8 @@ class AddProductActivity : AppCompatActivity() {
                     mIndex = newIndex
                     Log.d(Constanst.log, "${oldItem} | ${oldIndex} | ${newIndex} | ${newText} ")
                 }
+
+                 */
             }
         })
 
@@ -95,17 +102,15 @@ class AddProductActivity : AppCompatActivity() {
                 Toast.makeText(this, "Chưa chọn ảnh cho  sản phẩm",Toast.LENGTH_SHORT).show()
                 f = false
 
-            } else if(mIndex == -1  ) {
-                f = false
             }
             if (f == true) {
 
                 progress.showProgressBar(this)
-                viewModel.addData(Product(System.currentTimeMillis().toString(), listCategory.get(mIndex).id,nameP,priceP.toDouble(),
+                var user = ShareReference.getUser()
+                viewModel.addData(Product(System.currentTimeMillis().toString(),user.id,user.name,"Category",nameP,priceP.toDouble(),
                     numP.toInt(),description,0.0, linkPath,1)).observe(this, object :Observer<Boolean>{
                     override fun onChanged(t: Boolean?) {
                         if (t == true) {
-                            mIndex = -1 ;
                             viewBinding.nameOutlinedTextField.editText?.setText("")
                             viewBinding.priceOutlinedTextField.editText?.setText("")
                             viewBinding.mrpOutlinedTextField.editText?.setText("")
@@ -136,7 +141,5 @@ class AddProductActivity : AppCompatActivity() {
                 Picasso.with(this).load(linkPath.toString()).into(viewBinding.addImageProduct)
             }
         }
-        //
-
     }
 }

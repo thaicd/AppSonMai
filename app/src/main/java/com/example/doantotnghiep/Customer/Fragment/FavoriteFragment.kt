@@ -1,8 +1,6 @@
 package com.example.doantotnghiep.Customer.Fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,15 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.FavoriteAdapter
 import com.example.doantotnghiep.Helper.CustomProgressBar
-import com.example.doantotnghiep.IClickItem
-import com.example.doantotnghiep.R
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
+import com.example.doantotnghiep.Model.MyFavoriteProduct
 import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.ViewModel.ProductViewModel
-import com.example.doantotnghiep.databinding.FragmentCartBinding
+import com.example.doantotnghiep.ViewModel.UserViewModel
 import com.example.doantotnghiep.databinding.FragmentFavoriteBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,14 +43,16 @@ class FavoriteFragment : Fragment() , IClickItem {
     lateinit var viewBinding : FragmentFavoriteBinding
     lateinit var adapterFavorite : FavoriteAdapter
     lateinit var viewModelFavorite : ProductViewModel
+    lateinit var viewModelUser     : UserViewModel
     lateinit var loadingFavorite  : CustomProgressBar
+    var mListFavoriteProduct : MutableList<MyFavoriteProduct> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        viewModelUser = ViewModelProvider(this)[UserViewModel::class.java]
         viewBinding = FragmentFavoriteBinding.inflate(LayoutInflater.from(context))
         activity?.apply {
             loadingFavorite = CustomProgressBar(this)
@@ -64,7 +63,7 @@ class FavoriteFragment : Fragment() , IClickItem {
 
         context?.let {
 
-            adapterFavorite = FavoriteAdapter(it, this)
+            adapterFavorite = FavoriteAdapter(mListFavoriteProduct,it, this)
 
         }
         viewModelFavorite = ViewModelProvider(this)[ProductViewModel::class.java]
@@ -75,31 +74,41 @@ class FavoriteFragment : Fragment() , IClickItem {
             it.actionBar?.apply {
                 title = "Favorite Product"
             }
-            viewModelFavorite.getMyFavoriteProduct(user.id!!).observe(it, Observer {
-                if (it == null ) {
-                    viewBinding.labelData.visibility = View.VISIBLE
-
-                }else if (it.size == 0) {
-                    viewBinding.labelData.visibility = View.VISIBLE
-                }else {
-                    viewBinding.labelData.visibility = View.GONE
-                    it?.apply {
-                        Log.d("Favorote", it.toString())
+            viewModelUser.getListShop();
+            viewModelUser.getLiveDataListUser1().observe(it, Observer {
+                if (it != null && it.size > 0 ) {
+                    mListFavoriteProduct.clear()
+                    for (data in it ) {
+                        Log.d( "data: ", "${data.toString()}")
+                        viewModelFavorite.getMyFavoriteProduct(data.id!!,user.id!!).observe(requireActivity(), Observer {
+                            if(it != null && it.size > 0) {
+                                Log.d( "viewModelFavorite1_2: ","${it.toString()}")
+                                viewBinding.labelData.visibility = View.GONE
+                                viewBinding.skimmerLayout.stopShimmer()
+                                viewBinding.skimmerLayout.visibility = View.GONE
+                                //adapterFavorite.differ.submitList(mListFavorite)
+                                mListFavoriteProduct.addAll(it)
+                                adapterFavorite.notifyDataSetChanged()
+                            }
+                        })
+                    }
+                    Log.d( "mListFavorite: ", "${mListFavoriteProduct.toString()}")
+                    if (mListFavoriteProduct.size <= 0) {
+                        viewBinding.labelData.visibility = View.VISIBLE
                         viewBinding.skimmerLayout.stopShimmer()
                         viewBinding.skimmerLayout.visibility = View.GONE
-                        adapterFavorite.differ.submitList(it)
-                        adapterFavorite.notifyDataSetChanged()
                     }
+                    viewBinding.loadingData.visibility = View.INVISIBLE
                 }
-                viewBinding.loadingData.visibility = View.INVISIBLE
             })
+
         }
         viewBinding?.apply {
             this.recyclerviewFavorite?.apply {
                 this.adapter = adapterFavorite
                 this.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
                 hasFixedSize()
-                addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+//                addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
             }
         }
         viewBinding.skimmerLayout.startShimmer()

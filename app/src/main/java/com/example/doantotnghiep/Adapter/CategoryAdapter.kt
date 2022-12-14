@@ -3,10 +3,9 @@ package com.example.doantotnghiep.Adapter
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
 import com.example.doantotnghiep.Model.Category
 import com.example.doantotnghiep.databinding.ItemCategoryBinding
 import com.facebook.shimmer.Shimmer

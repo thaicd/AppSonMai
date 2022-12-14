@@ -1,34 +1,21 @@
 package com.example.doantotnghiep.Adapter
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
 import com.example.doantotnghiep.Model.Product
-import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.databinding.ItemProductBinding
-import com.example.doantotnghiep.databinding.ItemUserBinding
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
-import com.google.firebase.database.core.Context
+
 import com.squareup.picasso.Picasso
 
-class ProductAdapter(var mContext: android.content.Context, val listener : IClickItem) : RecyclerView.Adapter<ProductAdapter.ProductsVH>() {
+class ProductAdapter(var mListProduct : MutableList<Product> ,var mContext:Context, var listener : IClickItem) : RecyclerView.Adapter<ProductAdapter.ProductsVH>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<Product>() {
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.id == newItem.id
-        }
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, differCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsVH {
         val binding =
             ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -36,12 +23,15 @@ class ProductAdapter(var mContext: android.content.Context, val listener : IClic
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        if (mListProduct.size == 0) return 0
+        if (mListProduct == null ) return  0
+        return mListProduct.size
     }
 
     override fun onBindViewHolder(holder: ProductsVH, position: Int) {
 
-        val item = differ.currentList[position]
+        val item = mListProduct[position]
+        if (item.number == 0 ) return
         val shimmer = Shimmer.ColorHighlightBuilder()
             .setBaseColor(Color.parseColor("#F7F7F7"))
             .setBaseAlpha(1F)
@@ -55,8 +45,8 @@ class ProductAdapter(var mContext: android.content.Context, val listener : IClic
             // TODO clean logic
 
             itemName.text = item.nameProduct
-            itemPrice.text = "Price: "+item.price.toString()
-            itemNumber.text ="Number : "+item.number.toString()
+            itemPrice.text = item.price.toInt().toString()+" VND"
+
             itemStarNumber.text = item.rate.toString()
             Picasso.with(mContext).load(item.imgUrl).into(itemProduct)
 

@@ -1,23 +1,13 @@
 package com.example.doantotnghiep.Adapter
 
-import android.app.Activity
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
 import com.example.doantotnghiep.Model.Order
-import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.databinding.ItemOrdersBinding
-import com.example.doantotnghiep.databinding.ItemProductBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
 
 class OrdersAdapter ( var listOrders: MutableList<Order>, var mContext: android.content.Context, val listener : IClickItem) : RecyclerView.Adapter<OrdersAdapter.OrderViewHolder>() {
 
@@ -45,7 +35,16 @@ class OrdersAdapter ( var listOrders: MutableList<Order>, var mContext: android.
                 itemNumber.text ="Number : "+this.numberOptions.toString()
                 if (item.statusOrder == 1) {
                     itemStatusOrder.text = "Processing"
-                    itemStatusOrder.setBackgroundColor(Color.parseColor("#FFFFEB3B"))
+                    itemStatusOrder.setBackgroundColor(Color.parseColor("#fff167"))
+                }else if(item.statusOrder == 2) { // Waiting
+                    itemStatusOrder.text = "Waiting"
+                    itemStatusOrder.setBackgroundColor(Color.parseColor("#ffd700"))
+                }else if (item.statusOrder == 3) { // delivery
+                    itemStatusOrder.text = "Delivering"
+                    itemStatusOrder.setBackgroundColor(Color.parseColor("#ffa567"))
+                }else if (item.statusOrder == 4) { // completed
+                    itemStatusOrder.text = "Completed"
+                    itemStatusOrder.setBackgroundColor(Color.parseColor("#30ff1b"))
                 }
             }
             // TODO clean logic

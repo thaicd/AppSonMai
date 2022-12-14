@@ -6,13 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Customer.CustomerActivity">
 
-
     <FrameLayout
-        app:layout_constraintTop_toTopOf="parent "
+
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_marginBottom="55dp"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
     <me.ibrahimsn.lib.SmoothBottomBar
         app:layout_constraintRight_toRightOf="parent"
@@ -20,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         app:backgroundColor="@color/colorPrimary"
         app:menu="@menu/bot_nav"
         tools:ignore="MissingConstraints" />

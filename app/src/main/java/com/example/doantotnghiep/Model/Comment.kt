@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class Comment(
+    var idShop : String?= null ,
     var idComment: String? = null,
     var nameUser: String? = null ,
     var message : String? = null ,

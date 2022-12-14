@@ -3,26 +3,33 @@ package com.example.doantotnghiep.Customer.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.doantotnghiep.Adapter.CategoryAdapter
-import com.example.doantotnghiep.Customer.CustomerActivity.Companion.mCategory
-import com.example.doantotnghiep.Customer.ListProductForCustomerActivity
-import com.example.doantotnghiep.Helper.Constanst
-import com.example.doantotnghiep.Helper.CustomProgressBar
-import com.example.doantotnghiep.IClickItem
-import com.example.doantotnghiep.Model.Category
+import com.example.doantotnghiep.Adapter.ImageSliderAdapter
+import com.example.doantotnghiep.Adapter.ProductAdapter
+import com.example.doantotnghiep.Customer.DetailProductActivity
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
+import com.example.doantotnghiep.Model.Product
+import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.R
-import com.example.doantotnghiep.ViewModel.CategoryViewModel
-import com.example.doantotnghiep.databinding.ActivityCustomerBinding
+import com.example.doantotnghiep.ViewModel.ProductViewModel
+import com.example.doantotnghiep.ViewModel.UserViewModel
 import com.example.doantotnghiep.databinding.FragmentHomeBinding
-import es.dmoral.toasty.Toasty
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,9 +54,24 @@ class HomeFragment : Fragment() , IClickItem {
         }
     }
     lateinit var adapterCate : CategoryAdapter
-    lateinit var viewModelCate : CategoryViewModel
-    lateinit var progress : CustomProgressBar
-    var mListCategory : MutableList<Category> = mutableListOf()
+    lateinit var adapterViewPager : ImageSliderAdapter
+    lateinit var viewModelProduct : ProductViewModel
+    lateinit var viewModeUser     : UserViewModel
+    lateinit var adapterP : ProductAdapter
+    var listProductTemp = mutableListOf<Product>()
+    var mlistImage = mutableListOf<Int>()
+    var mHandler = Handler(Looper.getMainLooper())
+    var mRunable = Runnable {
+        var current = viewBinding.viewPager2.currentItem
+        if (current + 1 == mlistImage.size - 1) {
+            viewBinding.viewPager2.setCurrentItem(0)
+        }else {
+            viewBinding.viewPager2.setCurrentItem(current + 1)
+        }
+    }
+    var listProduct = mutableListOf<Product>()
+    var mListProduct = mutableListOf<Product>()
+   // var mListCategory : MutableList<Category> = mutableListOf()
     lateinit var viewBinding : FragmentHomeBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,15 +79,114 @@ class HomeFragment : Fragment() , IClickItem {
     ): View? {
         // Inflate the layout for this fragment
 
-        viewBinding = FragmentHomeBinding.inflate(LayoutInflater.from(context))
+        viewBinding = FragmentHomeBinding.inflate(LayoutInflater.from(context),container,false)
+        mlistImage.add(R.drawable.banan)
+        mlistImage.add(R.drawable.backgroundheader1)
+        mlistImage.add(R.drawable.banantrue)
+        mlistImage.add(R.drawable.woman)
+        mlistImage.add(R.drawable.worker)
 
-        viewBinding.loadingCategory.visibility = View.VISIBLE
+        viewBinding.loadingProduct.visibility = View.VISIBLE
         activity?.apply {
-            actionBar?.apply {
-                title = "List Category"
-//                setDisplayHomeAsUpEnabled(true)
-            }
+            adapterViewPager = ImageSliderAdapter(mlistImage,this)
         }
+        viewBinding.viewPager2.adapter = adapterViewPager
+        viewBinding.indicatorView.setViewPager(viewBinding.viewPager2)
+
+        viewBinding.viewPager2.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                mHandler.removeCallbacks(mRunable)
+                mHandler.postDelayed(mRunable, 2000)
+            }
+        })
+       context.let {
+           adapterP = ProductAdapter(mListProduct,it!!,this)
+       }
+
+        viewModelProduct = ViewModelProvider(this)[ProductViewModel::class.java]
+        viewModeUser     = ViewModelProvider(this)[UserViewModel::class.java]
+        viewModeUser.getListShop()
+        activity?.apply {
+            viewModeUser.getLiveDataListUser1().observe(this, Observer {
+                Log.d( "viewModeUser: ", "${it.toString()}")
+
+                if (it!= null && it.size > 0) {
+                    mListProduct.clear()
+                    listUser.clear()
+                    for (data in it ) {
+                        if (data.role_id == 1) {
+                            listUser.add(data)
+                            listProductTemp.clear()
+                            viewModelProduct.responseLiveData(data.id!!).observe(this, Observer {
+                                it?.apply {
+                                    Log.d( "viewModelProduct: ", "${this.toString()}")
+                                    listProduct.clear()
+                                    for (p in it ) {
+                                        listProduct.add(p)
+                                    }
+                                    if (listProduct.size > 0) {
+                                        mListProduct.addAll(listProduct)
+                                        listProductTemp.addAll(listProduct)
+                                        adapterP.notifyDataSetChanged()
+                                        viewBinding.layoutShimmer.stopShimmer()
+                                        viewBinding.layoutShimmer.visibility = View.GONE
+                                    }else {
+                                        viewBinding.labelData.text = "Not Production"
+                                    }
+                                    viewBinding.loadingProduct.visibility = View.INVISIBLE
+                                }
+                            })
+                        }
+                    }
+                }
+
+            })
+
+
+            viewBinding.recyclerProduct?.apply {
+                adapter = adapterP
+                layoutManager = GridLayoutManager(activity,2)
+                hasFixedSize()
+//                addItemDecoration(GridSpacingItemDecoration(2,3, false))
+            }
+            viewBinding.edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener{
+                override fun onEditorAction(
+                    v: TextView?,
+                    actionId: Int,
+                    event: KeyEvent?
+                ): Boolean {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        Log.d( "onEditorAction: ",viewBinding.edtSearch.text.toString())
+                        var strSearch = viewBinding.edtSearch.text.toString()
+                        var listP = mutableListOf<Product>()
+                        for (data in listProduct) {
+                            if (data.nameProduct!!.contains(strSearch)) {
+                                listP.add(data)
+                            }
+                        }
+                        listProduct.clear()
+                        if (listP.size == 0) {
+                            listProduct.addAll(listProductTemp)
+                        }else {
+                            listProduct.addAll(listP)
+                        }
+                        Log.d( "onEditorAction: ","list= ${listProduct.size}")
+                        adapterP.notifyDataSetChanged()
+                        return true
+                    }
+                    hideInputKeyboard()
+                    return false
+                }
+            })
+
+        }
+
+
+
+        /*
+        Tải dữ liệu của category
         viewModelCate = ViewModelProvider(this)[CategoryViewModel::class.java]
         adapterCate = context?.let { CategoryAdapter(mListCategory, it, this) }!!
 
@@ -81,35 +202,19 @@ class HomeFragment : Fragment() , IClickItem {
                 }
             })
         }
-        viewBinding.recyclerType?.apply {
-            adapter = adapterCate
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            hasFixedSize()
-        }
-//        mListCategory.add(Category(System.currentTimeMillis().toString(),"Category 1"))
-//        adapterCate.notifyDataSetChanged()
-        viewBinding.shimmerLayoutCategory.startShimmer()
+//        viewBinding.recyclerType?.apply {
+//            adapter = adapterCate
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//            hasFixedSize()
+//        }
+
+         */
+
+        viewBinding.layoutShimmer.startShimmer()
         return viewBinding.root
     }
-    override fun getPosition(index: Int) {
-        context?.let { Toasty.info(it,"position : ${index}" , Toasty.LENGTH_SHORT ).show() }
-        Log.d(Constanst.log, "${index}: ")
-        viewModelCate.checkExistCategory(mListCategory[index].id!!).observe(this, Observer {
-            if (it == true ) {
-                val intent = Intent(activity, ListProductForCustomerActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable("object", mListCategory[index])
-                mCategory = mListCategory[index]
-                intent.putExtras(bundle)
-                startActivity(intent)
-                context?.let { it1 -> Toasty.info(it1, " Có sản phẩm", Toasty.LENGTH_SHORT).show() }
-            }else {
-                context?.let { it1 -> Toasty.info(it1, "Không có sản phẩm", Toasty.LENGTH_SHORT).show() }
-            }
-        })
-    }
-
     companion object {
+        var listUser : MutableList<User>  = mutableListOf();
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -127,5 +232,23 @@ class HomeFragment : Fragment() , IClickItem {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun hideInputKeyboard() {
+        val view: View = activity?.getCurrentFocus()!!
+        if (view != null) {
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+    override fun getPosition(index: Int) {
+        activity?.apply {
+           // Toasty.info(this,"pos = $index",Toasty.LENGTH_SHORT).show()
+            val intent = Intent(this, DetailProductActivity::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable("product", mListProduct.get(index))
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
     }
 }

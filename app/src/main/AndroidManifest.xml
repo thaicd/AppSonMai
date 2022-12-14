@@ -6,20 +6,48 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".Application.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/shop_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/shop_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoAnTotNghiep"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Adminstrator.RemoveUserActivity"
+            android:exported="false"
+            android:parentActivityName=".Adminstrator.AdminShopActivity" />
+        <activity
+            android:name=".Adminstrator.ListShopAndUserActivity"
+            android:exported="false"
+            android:parentActivityName=".Adminstrator.AdminShopActivity" />
+        <activity
+            android:name=".Adminstrator.AdminShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.DetailOrderAdminActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.OrderProductAdminActivity" />
+        <activity
+            android:name=".Admin.OrderSoldAdminActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.HomeAdminActivity" />
+        <activity
+            android:name=".Admin.OrderProductAdminActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.HomeAdminActivity" />
+        <activity
+            android:name=".Customer.OrderDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".Customer.CartActivity"
             android:exported="false" />
@@ -27,13 +55,13 @@
             android:name=".Customer.OrderCustomerActivity"
             android:exported="false" />
         <activity
-            android:parentActivityName=".Customer.ListProductForCustomerActivity"
             android:name=".Customer.DetailProductActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Customer.CustomerActivity" />
         <activity
-            android:parentActivityName=".Customer.CustomerActivity"
             android:name=".Customer.ListProductForCustomerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Customer.CustomerActivity" />
         <activity
             android:name=".Admin.ListUserActivity"
             android:exported="false"
@@ -46,9 +74,9 @@
             android:name=".Admin.AddProductActivity"
             android:exported="false"
             android:parentActivityName=".Admin.HomeAdminActivity" />
-         <activity
-         android:name=".Customer.CustomerActivity"
-         android:exported="false" />
+        <activity
+            android:name=".Customer.CustomerActivity"
+            android:exported="false" />
         <activity
             android:name=".Admin.HomeAdminActivity"
             android:exported="false" />

@@ -21,10 +21,10 @@ class RatingViewModel : ViewModel() {
         return liveDataRatingAvarage
     }
 
-    fun addGetRating(idProduct: String , rate : Rating) {
-        Repository.getRepository().addRating(idProduct,rate,liveDataRating)
+    fun addGetRating(idShop: String, idProduct: String , rate : Rating) {
+        Repository.getRepository().addRating(idShop,idProduct,rate,liveDataRating)
     }
-    fun getRating(idProduct: String) {
-        Repository.getRepository().getRating(idProduct,liveDataRatingAvarage)
+    fun getRating(idShop: String, idProduct: String) {
+        Repository.getRepository().getRating(idShop, idProduct,liveDataRatingAvarage)
     }
 }

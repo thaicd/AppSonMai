@@ -65,8 +65,9 @@ dependencies {
 //    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
-
-
+    implementation 'me.relex:circleindicator:2.1.6'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation'com.github.travijuu:numberpicker:1.0.7'
 
 
 

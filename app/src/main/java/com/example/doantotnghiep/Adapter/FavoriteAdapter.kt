@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
 import com.example.doantotnghiep.Model.MyFavoriteProduct
-import com.example.doantotnghiep.databinding.ItemCartBinding
+import com.example.doantotnghiep.Model.Product
 import com.example.doantotnghiep.databinding.ItemFavoriteBinding
+
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import com.google.firebase.database.DataSnapshot
@@ -18,32 +19,16 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
-class FavoriteAdapter (var mContext: android.content.Context, val listener : IClickItem) : RecyclerView.Adapter<FavoriteAdapter.FavoriteVH>() {
+class FavoriteAdapter (var mListFavorite : MutableList<MyFavoriteProduct> ,var mContext: android.content.Context, val listener : IClickItem) : RecyclerView.Adapter<FavoriteAdapter.FavoriteVH>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<MyFavoriteProduct>() {
-        override fun areItemsTheSame(oldItem: MyFavoriteProduct, newItem: MyFavoriteProduct): Boolean {
-            return oldItem.prod?.id == newItem.prod?.id
-        }
-
-        override fun areContentsTheSame(oldItem: MyFavoriteProduct, newItem: MyFavoriteProduct): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, differCallback)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteVH {
-        val binding =
-            ItemFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FavoriteVH(binding)
-    }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return mListFavorite.size
     }
 
     override fun onBindViewHolder(holder: FavoriteVH, position: Int) {
 
-        val item = differ.currentList[position]
+        val item = mListFavorite[position]
 
         val skimmer = Shimmer.ColorHighlightBuilder()
             .setBaseColor(Color.parseColor("#F3F3F3"))
@@ -60,15 +45,18 @@ class FavoriteAdapter (var mContext: android.content.Context, val listener : ICl
 
             // TODO clean logic
 
-            itemName.text = item.prod?.nameProduct
-            itemPrice.text = "Price: " + item.prod?.price.toString()
-
-            FirebaseDatabase.getInstance().getReference("Products/${item.prod!!.id}").child("number")
+            FirebaseDatabase.getInstance().getReference("Products/${item.prod!!.idShop}/${item.prod!!.id}")
                 .addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot != null) {
-                            val number = snapshot.getValue(Long::class.java)
-                            itemNumber.text = "Number : " + number.toString()
+                            val prod = snapshot.getValue(Product::class.java)
+                            prod?.apply {
+                                if(this.number != 0) {
+                                    itemName.text = this.nameProduct
+                                    itemPrice.text = this.price.toLong().toString()+" VND"
+                                    itemStarNumber.text = this.rate.toString()
+                                }
+                            }
                         }
                     }
 
@@ -88,4 +76,9 @@ class FavoriteAdapter (var mContext: android.content.Context, val listener : ICl
     }
 
     inner class FavoriteVH(val binding: ItemFavoriteBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteVH {
+        val view = ItemFavoriteBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+        return FavoriteVH(view)
+    }
 }

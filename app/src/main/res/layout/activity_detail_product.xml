@@ -15,9 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="#0C0C0C"
+            app:contentScrim="#560ADC"
+            app:title="tttttttttttttttttttttttt"
             app:expandedTitleTextAppearance="@android:color/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/image_product"
@@ -30,8 +31,10 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:theme="@style/ToolbarColoredBackArrow"
                 android:title="Food Name"
                 app:layout_collapseMode="parallax"
+                app:titleTextColor="@color/white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -97,23 +100,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:src="@drawable/ic_baseline_attach_money_24"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_weight="0.1">
 
-                    </ImageView>
                     <TextView
 
+                        android:layout_marginLeft="15dp"
                         android:id="@+id/item_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_weight="0.6"
                         android:text="15000đ"
-                        android:textColor="#1A554E"
+                        android:textColor="#ED1D0E"
                         android:textSize="20sp"
                         android:textStyle="bold" />
                     <ImageView
@@ -136,16 +133,26 @@
                 </LinearLayout>
                 <TextView
                     android:layout_marginLeft="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="9"
+                    android:text="Chi tiết sản phẩm"
+                    android:textColor="#1A554E"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+                <TextView
+                    android:layout_marginLeft="15dp"
                     android:id="@+id/item_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_weight="9"
-                    android:text="15000đ"
-                    android:textColor="#1A554E"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="#78CCC2"
+                    android:textSize="15sp"
+                    android:textStyle="italic" />
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/item_list_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

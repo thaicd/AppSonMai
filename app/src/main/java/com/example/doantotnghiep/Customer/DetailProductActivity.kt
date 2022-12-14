@@ -68,19 +68,20 @@ class DetailProductActivity : AppCompatActivity() {
         }, 1000)
         user = ShareReference.getUser()
         val bundle = intent.extras
-        Log.d("ID_ORDER = ", idOrder.toString())
+        //Log.d("ID_ORDER = ", idOrder.toString())
         if (bundle != null ) {
             mProduct = bundle.getSerializable("product") as Product
+            setSupportActionBar(viewBinding.toolbar)
             supportActionBar?.apply {
-                title = mProduct.nameProduct
-                setDisplayHomeAsUpEnabled(true)
+                this.setDisplayHomeAsUpEnabled(true)
             }
             Picasso.with(this).load(mProduct.imgUrl).into(viewBinding.imageProduct)
             viewBinding.itemName.text = mProduct.nameProduct
-            viewBinding.itemPrice.text = mProduct.price.toString()
+            viewBinding.itemPrice.text = mProduct.price.toInt().toString() + " VND"
             viewBinding.itemDescription.text = mProduct.description.toString()
             viewBinding.numberStar.text= mProduct.rate!!.toString()
-            viewModelProduct.getStatusFavorite(user.id!!,mProduct.id!!).observe(this, Observer {
+            viewBinding.collapsingOrder.title = mProduct.nameProduct
+            viewModelProduct.getStatusFavorite(user.id!!,mProduct.id!!, mProduct.idShop!!).observe(this, Observer {
                 Log.d(Constanst.log, "status []: ${it} ")
                 if (it == 1) {
                     flag = 0
@@ -97,18 +98,19 @@ class DetailProductActivity : AppCompatActivity() {
         })
         viewBinding.btnCart.setOnClickListener {
 
-            viewModelProduct.getNumberProduct(mProduct.id!!).observe(this@DetailProductActivity,
+            viewModelProduct.getNumberProduct(mProduct.id!!,mProduct.idShop!!).observe(this@DetailProductActivity,
             Observer {
                 it?.apply {
                     if(it > 0) {
-                        var cart = Cart(mProduct,0,0,System.currentTimeMillis().toString(),idOrder.toString())
+                        var cart = Cart(mProduct.idShop!!, mProduct.nameShop!!,mProduct,0,
+                            0,System.currentTimeMillis().toString(),idOrder.toString())
                         viewModelCart.addCartProduct(user.id!!,mProduct.price!!.toInt(), mProduct.id!!, cart ).observe(
                             this@DetailProductActivity,  Observer{
                             Log.d(Constanst.log, "addCartProduct: finshed ")
                         })
 
                         val number = it - 1;
-                        viewModelProduct.editNumberProduct(mProduct.id!!, number)
+                        viewModelProduct.editNumberProduct(mProduct.idShop!!, mProduct.id!!, number)
                             .observe(this@DetailProductActivity,
                                 Observer {
                                     Log.d("editNumberProduct:", " editNumberProduct Successfully")
@@ -160,24 +162,22 @@ class DetailProductActivity : AppCompatActivity() {
             adapter = adapterComment
             hasFixedSize()
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         viewModelComment = ViewModelProvider(this)[CommentViewModel::class.java]
 
-        viewModelComment.getListComment(mProduct.id!!).observe(this, Observer {
-
-            it?.apply {
-                Log.d(Constanst.log, "list comment : ${this} ")
+        viewModelComment.getListCommentLiveData(mProduct.idShop!!, mProduct.id!!);
+        viewModelComment.getLiveDataComment().observe(this, Observer {
+            if (it != null && it.size > 0){
                 listComment.clear()
-                listComment.addAll(this)
+                listComment.addAll(it)
                 adapterComment.notifyDataSetChanged()
-
             }
         })
         viewModelRating.liveDataRatingAvarage1().observe(this, Observer {
             it?.apply {
                 viewBinding.numberStar.text = it.toDouble().toString()
-                viewModelProduct.editRatingProduct(mProduct.id!!,it.toDouble()).
+                viewModelProduct.editRatingProduct(mProduct.idShop!!,mProduct.id!!,it.toDouble()).
                 observe(this@DetailProductActivity,
                     Observer {
                         Log.d("viewModelRating: ", it.toString())
@@ -200,8 +200,6 @@ class DetailProductActivity : AppCompatActivity() {
         dialog.setCancelable(true)
 
 
-
-
         var numberRate : Float = (0).toFloat()
         binding.itemRate.setOnRatingChangeListener { ratingBar, rating ->
             numberRate = rating
@@ -210,8 +208,8 @@ class DetailProductActivity : AppCompatActivity() {
             val feedback = binding.edtFeedback.text.trim()
             Log.d("SEND_COMMENT", "SEND_COMMENT : RATING")
             val rate = Rating(System.currentTimeMillis().toString(), numberRate, user.id!!)
-            viewModelRating.addGetRating(mProduct.id!!, rate)
-            viewModelRating.getRating(mProduct.id!!)
+            viewModelRating.addGetRating(mProduct.idShop!!, mProduct.id!!, rate)
+            viewModelRating.getRating(mProduct.idShop!!, mProduct.id!!)
 
             Log.d("SEND_COMMENT", "SEND_COMMENT : RATING1 - length = " + feedback.length + " feedback = " + feedback )
             if(feedback.length > 0 ) {
@@ -219,7 +217,7 @@ class DetailProductActivity : AppCompatActivity() {
                 val time = Time.convertTimstampToDate()
                 val comment =
                     Comment(System.currentTimeMillis().toString(), user.name, feedback.toString(), time)
-                viewModelComment.addComment(mProduct.id!!, comment.idComment!!, comment)
+                viewModelComment.addComment(mProduct.idShop!!,mProduct.id!!, comment.idComment!!, comment)
                     .observe(this, Observer {
                         it?.apply {
                             Log.d("COMMENT", it.toString())

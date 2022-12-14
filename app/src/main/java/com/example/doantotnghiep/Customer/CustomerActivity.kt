@@ -1,25 +1,18 @@
 package com.example.doantotnghiep.Customer
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.CategoryAdapter
+import com.example.doantotnghiep.Adapter.ImageSliderAdapter
 import com.example.doantotnghiep.Customer.Fragment.CartFragment
 import com.example.doantotnghiep.Customer.Fragment.FavoriteFragment
 import com.example.doantotnghiep.Customer.Fragment.HomeFragment
 import com.example.doantotnghiep.Customer.Fragment.OrderFragment
-import com.example.doantotnghiep.Helper.Constanst
 import com.example.doantotnghiep.Helper.CustomProgressBar
-import com.example.doantotnghiep.IClickItem
 import com.example.doantotnghiep.MainActivity
 import com.example.doantotnghiep.Model.Category
 import com.example.doantotnghiep.Model.Order
@@ -28,7 +21,6 @@ import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.CategoryViewModel
 import com.example.doantotnghiep.databinding.ActivityCustomerBinding
 import com.google.firebase.auth.FirebaseAuth
-import es.dmoral.toasty.Toasty
 
 class CustomerActivity : AppCompatActivity() {
     companion object {
@@ -36,15 +28,18 @@ class CustomerActivity : AppCompatActivity() {
         var mProduct  : Product  = Product()
         var mOrder    : Order    = Order()
     }
+
     lateinit var viewBindingCustomer : ActivityCustomerBinding
     lateinit var adapterCate : CategoryAdapter
     lateinit var viewModelCate : CategoryViewModel
     lateinit var progress : CustomProgressBar
+    lateinit var adapterViewPager : ImageSliderAdapter
     var mListCategory : MutableList<Category> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        progress = CustomProgressBar(this)
 //        progress.showProgressBar(this)
+
         viewBindingCustomer = ActivityCustomerBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBindingCustomer.root)
         supportActionBar?.apply {
@@ -56,7 +51,7 @@ class CustomerActivity : AppCompatActivity() {
             when(it) {
                 0 -> {
                     supportActionBar?.apply {
-                        title = "List Category"
+                        title = "Production"
 
                     }
                     replaceFragment(HomeFragment())

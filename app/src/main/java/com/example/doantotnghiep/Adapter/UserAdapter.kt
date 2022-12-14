@@ -1,16 +1,16 @@
 package com.example.doantotnghiep.Adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickUser
 import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.databinding.ItemUserBinding
 
-class UserAdapter(val listener : IClickItem): RecyclerView.Adapter<UserAdapter.NewsVH>() {
+class UserAdapter(val listener : IClickUser): RecyclerView.Adapter<UserAdapter.NewsVH>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
@@ -47,7 +47,7 @@ class UserAdapter(val listener : IClickItem): RecyclerView.Adapter<UserAdapter.N
 
             // on item click
             holder.itemView.setOnClickListener {
-                listener.getPosition(holder.adapterPosition)
+                listener.getPosition(item)
             }
         }
     }

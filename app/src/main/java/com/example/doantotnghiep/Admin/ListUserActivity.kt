@@ -2,24 +2,19 @@ package com.example.doantotnghiep.Admin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.doantotnghiep.Adapter.UserAdapter
-import com.example.doantotnghiep.Helper.Constanst
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
+import com.example.doantotnghiep.InterfaceProcess.IClickUser
 import com.example.doantotnghiep.Model.User
-import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.UserViewModel
-import com.example.doantotnghiep.databinding.ActivityListProductBinding
 import com.example.doantotnghiep.databinding.ActivityListUserBinding
 
-class ListUserActivity : AppCompatActivity(), IClickItem {
+class ListUserActivity : AppCompatActivity(), IClickUser {
     lateinit var viewBinding : ActivityListUserBinding
     lateinit var _adapter: UserAdapter
 
@@ -32,6 +27,12 @@ class ListUserActivity : AppCompatActivity(), IClickItem {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         viewModel = ViewModelProvider(this)[UserViewModel::class.java]
         _adapter = UserAdapter(this)
+        viewBinding.toolbar.setTitle("List User")
+        setSupportActionBar(viewBinding.toolbar)
+        supportActionBar?.apply {
+            this.setDisplayShowHomeEnabled(true)
+            this.setDisplayHomeAsUpEnabled(true);
+        }
         viewBinding.recyclerUser?.apply {
             adapter = _adapter
             hasFixedSize()
@@ -42,7 +43,13 @@ class ListUserActivity : AppCompatActivity(), IClickItem {
         viewModel.getDataListUser.observe(this, object : Observer<List<User>>{
             override fun onChanged(t: List<User>?) {
                 t?.apply {
-                    _adapter.differ.submitList(t)
+                    var listUser = mutableListOf<User>()
+                    for (data in this ) {
+                        if (data.role_id == 2 ) {
+                            listUser.add(data)
+                        }
+                    }
+                    _adapter.differ.submitList(listUser)
                 }
             }
 
@@ -50,8 +57,6 @@ class ListUserActivity : AppCompatActivity(), IClickItem {
 
 
     }
-
-    override fun getPosition(index: Int) {
-
+    override fun getPosition(user: User) {
     }
 }

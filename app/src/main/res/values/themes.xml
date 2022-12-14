@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.DoAnTotNghiep" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Theme.DoAnTotNghiep" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -28,7 +28,9 @@
     <style name="Widget.MyTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="shapeAppearanceOverlay">?attr/shapeAppearanceLargeComponent</item>
     </style>
-
+    <style name="ToolbarColoredBackArrow" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+    </style>
     <!--Navigation Drawer-->
     <style name="Widget.MyTheme.NavigationView" parent="Widget.MaterialComponents.NavigationView">
         <item name="itemTextAppearance">?attr/textAppearanceBody2</item>

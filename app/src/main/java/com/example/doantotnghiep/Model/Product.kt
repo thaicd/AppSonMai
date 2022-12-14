@@ -6,6 +6,8 @@ import java.io.Serializable
 @IgnoreExtraProperties
 data class Product(
     var id : String? = null,
+    var idShop : String?= null ,
+    var nameShop : String?= null,
     var idCategory: String ?= null,
     var nameProduct : String? =null ,
     var price : Double =0.0,

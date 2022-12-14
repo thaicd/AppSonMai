@@ -1,6 +1,7 @@
 package com.example.doantotnghiep.Model
 
 import com.google.firebase.database.IgnoreExtraProperties
+import java.io.Serializable
 
 @IgnoreExtraProperties
 data class User constructor(var id : String?= null,
@@ -10,4 +11,4 @@ data class User constructor(var id : String?= null,
                 var role_id : Int = 2,
                 var password : String?= null,
                 var address : String?= null
-)
+):Serializable

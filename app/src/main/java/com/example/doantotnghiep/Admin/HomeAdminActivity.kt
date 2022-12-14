@@ -15,28 +15,47 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.doantotnghiep.Helper.Constanst
 import com.example.doantotnghiep.Helper.CustomProgressBar
+import com.example.doantotnghiep.MainActivity
 import com.example.doantotnghiep.Model.Category
+import com.example.doantotnghiep.Model.User
 import com.example.doantotnghiep.R
+import com.example.doantotnghiep.Repository.ShareReference
 import com.example.doantotnghiep.ViewModel.CategoryViewModel
 import com.example.doantotnghiep.databinding.ActivityHomeAdminBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeAdminActivity : AppCompatActivity() {
 
     private lateinit var viewBindingAdmin : ActivityHomeAdminBinding
     lateinit var viewModelCategory : CategoryViewModel
     lateinit var loading : CustomProgressBar
+    lateinit var mData : User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mData = ShareReference.getUser()
 
         viewBindingAdmin = ActivityHomeAdminBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBindingAdmin.root)
+        val data = intent.extras
+        data?.apply {
+            mData = this.get("user") as User
+        }
+        //if (mData == null ) {
+       // }
         loading = CustomProgressBar(this)
 
-        viewBindingAdmin.btnAddCategory.setOnClickListener {
-            _->
-            _showDialog(Gravity.BOTTOM)
+//        viewBindingAdmin.btnAddCategory.setOnClickListener {
+//            _->
+//            _showDialog(Gravity.BOTTOM)
+//        }
+        viewBindingAdmin.toolbar.setTitle(mData.name)
+        viewBindingAdmin.txtNameShop.text = mData.name
+        viewBindingAdmin.btnExit.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
         viewBindingAdmin.btnAddProduct.setOnClickListener { _ ->
                 val intent = Intent(this@HomeAdminActivity, AddProductActivity::class.java)
@@ -47,6 +66,14 @@ class HomeAdminActivity : AppCompatActivity() {
             _->
 
             val intent = Intent(this@HomeAdminActivity, ListUserActivity::class.java)
+            startActivity(intent)
+        }
+        viewBindingAdmin.btnWatchOrder.setOnClickListener {
+            val intent = Intent(this@HomeAdminActivity, OrderProductAdminActivity::class.java)
+            startActivity(intent)
+        }
+        viewBindingAdmin.btnOrdrProductSold.setOnClickListener {
+            val intent = Intent(this@HomeAdminActivity, OrderSoldAdminActivity::class.java)
             startActivity(intent)
         }
         viewBindingAdmin.btnListProduct.setOnClickListener {

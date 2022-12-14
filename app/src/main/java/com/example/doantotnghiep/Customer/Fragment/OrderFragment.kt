@@ -1,8 +1,7 @@
 package com.example.doantotnghiep.Customer.Fragment
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doantotnghiep.Adapter.OrdersAdapter
-import com.example.doantotnghiep.Customer.CustomerActivity
-import com.example.doantotnghiep.Helper.CustomProgressBar
-import com.example.doantotnghiep.IClickItem
+import com.example.doantotnghiep.Customer.OrderDetailsActivity
+import com.example.doantotnghiep.InterfaceProcess.IClickItem
 import com.example.doantotnghiep.Model.Order
-import com.example.doantotnghiep.R
 import com.example.doantotnghiep.ViewModel.OrderViewModel
 import com.example.doantotnghiep.databinding.FragmentOrderBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -85,6 +82,7 @@ class OrderFragment : Fragment() , IClickItem {
                     binding.loadingData.visibility = View.INVISIBLE
                 }else{
                     binding.labelData.visibility = View.VISIBLE
+                    binding.labelData.text="Order is empty"
                     binding.loadingData.visibility = View.INVISIBLE
                 }
                 binding.shimmerLayout.stopShimmer()
@@ -116,6 +114,10 @@ class OrderFragment : Fragment() , IClickItem {
     }
 
     override fun getPosition(index: Int) {
-
+        val intent = Intent(activity,OrderDetailsActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("order", listOrders.get(index))
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }

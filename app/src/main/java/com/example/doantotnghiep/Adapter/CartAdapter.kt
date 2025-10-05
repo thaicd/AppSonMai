@@ -36,10 +36,10 @@ class CartAdapter (var listCart : MutableList<Cart>, var mContext: android.conte
         Log.d("SIZE : ","${listCart.size}")
         return listCart.size
     }
-
+  
     override fun onBindViewHolder(holder: CartVH, position: Int) {
 
-        val item = listCart[position]
+        val item = listCart[position] 
         val shimmer = Shimmer.ColorHighlightBuilder()
             .setBaseColor(Color.parseColor("#F7F7F7"))
             .setBaseAlpha(1F)

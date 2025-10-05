@@ -32,7 +32,7 @@ class CartAdapter (var listCart : MutableList<Cart>, var mContext: android.conte
         return CartVH(binding)
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int {   
         Log.d("SIZE : ","${listCart.size}")
         return listCart.size
     }

@@ -48,7 +48,7 @@ class CartAdapter (var listCart : MutableList<Cart>, var mContext: android.conte
             .setDropoff(50F)
             .build()
 
-        val shimmerDrawable = ShimmerDrawable()
+        val shimmerDrawable = ShimmerDrawable()   
         shimmerDrawable.setShimmer(shimmer)
         holder.binding.apply {
             itemName.text = item.prod?.nameProduct

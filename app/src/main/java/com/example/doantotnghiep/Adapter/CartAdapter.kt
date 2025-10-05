@@ -40,7 +40,7 @@ class CartAdapter (var listCart : MutableList<Cart>, var mContext: android.conte
     override fun onBindViewHolder(holder: CartVH, position: Int) { 
 
         val item = listCart[position] 
-        val shimmer = Shimmer.ColorHighlightBuilder()
+        val shimmer = Shimmer.ColorHighlightBuilder()   
             .setBaseColor(Color.parseColor("#F7F7F7"))
             .setBaseAlpha(1F)
             .setHighlightColor(Color.parseColor("#E3E3E3"))

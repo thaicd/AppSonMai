@@ -43,7 +43,7 @@ class CartAdapter (var listCart : MutableList<Cart>, var mContext: android.conte
         val shimmer = Shimmer.ColorHighlightBuilder()   
             .setBaseColor(Color.parseColor("#F7F7F7"))
             .setBaseAlpha(1F)
-            .setHighlightColor(Color.parseColor("#E3E3E3"))
+            .setHighlightColor(Color.parseColor("#E3E3E3"))   
             .setHighlightAlpha(1F)
             .setDropoff(50F)
             .build()
